@@ -19,9 +19,9 @@ export class CustomCurve extends THREE.Curve<THREE.Vector3> {
 
   getPoint(t :number) :THREE.Vector3 {
     
-    var tx = t * 3 - 1.5;
+    var tx = t*20;
 	  var ty = Math.sin( 2 * Math.PI * t );
-	  var tz = 0;
+	  var tz = t;
   
     return new THREE.Vector3( tx, ty, tz ).multiplyScalar( this.scale );
   }
@@ -38,8 +38,10 @@ interface TubeSpec {
 
 export const tube = (path :CustomCurve) : THREE.Mesh => {
 
-  var geometry :THREE.TubeBufferGeometry = new THREE.TubeBufferGeometry(path, 20, 2, 8, false);
+  var geometry :THREE.TubeBufferGeometry = new THREE.TubeBufferGeometry(path, 100, 8, 16, false);
+
   var material :THREE.MeshLambertMaterial = new THREE.MeshLambertMaterial( { color: 0xaaccff } );
+  material.side = THREE.DoubleSide;
   
   return new THREE.Mesh( geometry, material );
 
