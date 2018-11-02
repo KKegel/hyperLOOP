@@ -2,6 +2,8 @@ import * as THREE  from 'three';
 
 
 let camera : THREE.PerspectiveCamera = null;
+let clock = null;
+let delta;
 
 const init = () => {
   
@@ -26,21 +28,25 @@ const build = ()  => {
   // pause/play
   let isPlay = true;
 
-  // rotation speed
-  const xSpeed = 0.05;
-  const ySpeed = 0.05;
+  clock = new THREE.Clock(true);
+
+  // rotation anngle in degrees
+  const xSpeed = 45 * Math.PI / 180;  
+  const ySpeed = 45 * Math.PI / 180;
+
   const onDocumentKeyDown = (event) => {
   
     const key = event.key;
-
+    console.log(delta);
+    
     if (key == "w" || key == "ArrowUp") {
-      camera.rotation.x -= xSpeed;
+      camera.rotation.x -= xSpeed * delta; // Rotates 1 radian per second
     } else if (key == "s" || key == "ArrowDown") {
-      camera.rotation.x += xSpeed;
+      camera.rotation.x += xSpeed * delta;
     } else if (key == "a" || key == "ArrowLeft") {
-      camera.rotation.y -= ySpeed;
+      camera.rotation.y -= ySpeed * delta;
     } else if (key == "d" || key == "ArrowRight") {
-      camera.rotation.y += ySpeed;
+      camera.rotation.y += ySpeed * delta;
     } else if (key == "Escape") {
       isPlay = !isPlay;
     } else if (key == "+") {
@@ -56,8 +62,9 @@ const build = ()  => {
 
 
   const animate = () => {
-    requestAnimationFrame( animate );
+    delta = clock.getDelta(); // needs to be called regularly
 
+    requestAnimationFrame( animate );
     renderer.render( scene, camera );
   };
 
