@@ -1,9 +1,5 @@
 import * as THREE  from 'three';
-<<<<<<< HEAD
 import { tube, CustomCurve } from 'src/scene/tube';
-=======
-import { render } from 'react-dom';
->>>>>>> 723592fbbf6b3ab6f17e96a06c437eecd46c63c2
 
 
 let scene :THREE.Scene;
@@ -37,9 +33,9 @@ const init = () => { // use for initialization
 
 
   var path :CustomCurve = new CustomCurve( 10 );
-  let cube :THREE.Mesh = tube(path);
+  let t :THREE.Mesh = tube(path);
 
-  scene.add(cube);
+  scene.add(t);
 
   camera.position.z = 5;
 
@@ -57,8 +53,8 @@ const animate = () => { // updated once per frame
 
 const onDocumentKeyDown = (event) => { // camera rotation
    // rotation anngle in degrees
-   const xSpeed = 45 * Math.PI / 180;  
-   const ySpeed = 45 * Math.PI / 180;
+   const xSpeed = 90 * Math.PI / 180;  
+   const ySpeed = 90 * Math.PI / 180;
  
   const key = event.key;
   
