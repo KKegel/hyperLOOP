@@ -1,6 +1,5 @@
 import * as THREE  from 'three';
-import { render } from 'react-dom';
-import { Vector3 } from 'three';
+import { tube, CustomCurve } from 'src/scene/tube';
 
 
 let scene :THREE.Scene;
@@ -30,6 +29,19 @@ const init = () => { // use for initialization
   const material :THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
   cube = new THREE.Mesh( geometry, material );
   scene.add( cube );
+  var light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
+  light.position.set( 1, 1, 1 ).normalize();
+
+  var light2 = new THREE.AmbientLight( 0xFF0000, 0.5 );
+
+  scene.add(light);
+  scene.add(light2);
+
+
+  var path :CustomCurve = new CustomCurve( 10 );
+  let t :THREE.Mesh = tube(path);
+
+  scene.add(t);
 
   camera.position.z = 5;
 
@@ -57,8 +69,8 @@ const animate = () => { // updated once per frame
 
 const onDocumentKeyDown = (event) => { // camera rotation
    // rotation anngle in degrees
-   const xSpeed = 45 * Math.PI / 180;  
-   const ySpeed = 45 * Math.PI / 180;
+   const xSpeed = 90 * Math.PI / 180;  
+   const ySpeed = 90 * Math.PI / 180;
  
   const key = event.key;
   
