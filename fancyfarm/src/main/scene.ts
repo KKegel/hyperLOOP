@@ -9,12 +9,14 @@ let renderer :THREE.WebGLRenderer
 let clock;
 let delta;
 let light :THREE.DirectionalLight;
+let time;
+
+let cube :THREE.Mesh;
 
 const build = ()  => { // called from react component
   init();
   animate();
 }
-
 
 const init = () => { // use for initialization
   scene = new THREE.Scene();
@@ -27,6 +29,13 @@ const init = () => { // use for initialization
   light = new THREE.DirectionalLight( 0xFFeeee, 1 );
   light.position.set( 1,1,1).normalize();
 
+  const geometry :THREE.BoxGeometry = new THREE.BoxGeometry( 1, 1, 1 );
+  const material :THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+  cube = new THREE.Mesh( geometry, material );
+  scene.add( cube );
+  var light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
+  light.position.set( 1, 1, 1 ).normalize();
+
   var light2 = new THREE.AmbientLight( 0xFFFFFF, 1 );
 
   scene.add(light);
@@ -37,9 +46,9 @@ const init = () => { // use for initialization
   let t :THREE.Mesh = tube(path);
   t.matrixAutoUpdate = true;
 
-var geometry = t.geometry;
+var tubegeometry = t.geometry;
 
-var wireframe = new THREE.WireframeGeometry( geometry );
+var wireframe = new THREE.WireframeGeometry( tubegeometry );
 
 var line = new THREE.LineSegments( wireframe );
 
@@ -61,10 +70,20 @@ var line = new THREE.LineSegments( wireframe );
   document.addEventListener("keydown", onDocumentKeyDown, false);
 }
 
+let z = 0.05;
+let resetTime = 1.5;
+let passed = 0;
 const animate = () => { // updated once per frame
   delta = clock.getDelta(); // needs to be called regularly, f.e. here
   light.position.set( camera.position.x, camera.position.y, camera.position.z).normalize();
+  passed += delta;
 
+  if (passed > resetTime ) {
+      z = z * -1;
+    passed = 0;
+  }
+  cube.position.z =  cube.position.z + z;
+  cube.lookAt(cube.position);
   requestAnimationFrame( animate );
   renderer.render( scene, camera );
 };
