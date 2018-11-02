@@ -1,5 +1,5 @@
 import * as THREE  from 'three';
-import { tube } from 'src/scene/tube';
+import { tube, CustomCurve } from 'src/scene/tube';
 
 
 let camera : THREE.PerspectiveCamera = null;
@@ -19,18 +19,14 @@ const build = ()  => {
   var light = new THREE.DirectionalLight( 0xFFFFFF, 1 );
   light.position.set( 1, 1, 1 ).normalize();
 
-//var helper = new THREE.DirectionalLightHelper( light, 5 );
-var light2 = new THREE.AmbientLight( 0x404040, 1 ); // soft white light
+  var light2 = new THREE.AmbientLight( 0xFF0000, 0.5 );
+
+  scene.add(light);
+  scene.add(light2);
 
 
-scene.add(light);
-scene.add(light2);
-  /*const geometry :THREE.BoxGeometry = new THREE.BoxGeometry( 1, 1, 1 );
-  const material :THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-  const cube :THREE.Mesh = new THREE.Mesh( geometry, material );*/
-  //scene.add( cube );
-
-  let cube :THREE.Mesh = tube();
+  var path :CustomCurve = new CustomCurve( 10 );
+  let cube :THREE.Mesh = tube(path);
 
   scene.add(cube);
 
