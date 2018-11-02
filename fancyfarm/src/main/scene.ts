@@ -1,5 +1,6 @@
 import * as THREE  from 'three';
 import { render } from 'react-dom';
+import { Vector3 } from 'three';
 
 
 let scene :THREE.Scene;
@@ -8,12 +9,14 @@ let renderer :THREE.WebGLRenderer
 
 let clock;
 let delta;
+let time;
+
+let cube :THREE.Mesh;
 
 const build = ()  => { // called from react component
   init();
   animate();
 }
-
 
 const init = () => { // use for initialization
   scene = new THREE.Scene();
@@ -25,7 +28,7 @@ const init = () => { // use for initialization
 
   const geometry :THREE.BoxGeometry = new THREE.BoxGeometry( 1, 1, 1 );
   const material :THREE.MeshBasicMaterial = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-  const cube :THREE.Mesh = new THREE.Mesh( geometry, material );
+  cube = new THREE.Mesh( geometry, material );
   scene.add( cube );
 
   camera.position.z = 5;
@@ -35,9 +38,19 @@ const init = () => { // use for initialization
   document.addEventListener("keydown", onDocumentKeyDown, false);
 }
 
+let z = 0.05;
+let resetTime = 1.5;
+let passed = 0;
 const animate = () => { // updated once per frame
   delta = clock.getDelta(); // needs to be called regularly, f.e. here
+  passed += delta;
 
+  if (passed > resetTime ) {
+      z = z * -1;
+    passed = 0;
+  }
+  cube.position.z =  cube.position.z + z;
+  cube.lookAt(cube.position);
   requestAnimationFrame( animate );
   renderer.render( scene, camera );
 };
