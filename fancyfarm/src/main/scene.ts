@@ -1,18 +1,29 @@
 import * as THREE  from 'three';
+<<<<<<< HEAD
 import { tube, CustomCurve } from 'src/scene/tube';
+=======
+import { render } from 'react-dom';
+>>>>>>> 723592fbbf6b3ab6f17e96a06c437eecd46c63c2
 
 
-let camera : THREE.PerspectiveCamera = null;
+let scene :THREE.Scene;
+let camera : THREE.PerspectiveCamera;
+let renderer :THREE.WebGLRenderer
 
-const init = () => {
-  
+let clock;
+let delta;
+
+const build = ()  => { // called from react component
+  init();
+  animate();
 }
 
-const build = ()  => {
-  const scene :THREE.Scene = new THREE.Scene();
+
+const init = () => { // use for initialization
+  scene = new THREE.Scene();
   camera  = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
 
-  const renderer :THREE.WebGLRenderer = new THREE.WebGLRenderer();
+  renderer = new THREE.WebGLRenderer();
   renderer.setSize( window.innerWidth, window.innerHeight );
   document.body.appendChild( renderer.domElement );
 
@@ -32,49 +43,42 @@ const build = ()  => {
 
   camera.position.z = 5;
 
-  // pause/play
-  let isPlay = true;
-
-  // rotation speed
-  const xSpeed = 0.05;
-  const ySpeed = 0.05;
-  const onDocumentKeyDown = (event) => {
-  
-    const key = event.key;
-
-    if (key == "w" || key == "ArrowUp") {
-      camera.rotation.x -= xSpeed;
-    } else if (key == "s" || key == "ArrowDown") {
-      camera.rotation.x += xSpeed;
-    } else if (key == "a" || key == "ArrowLeft") {
-      camera.rotation.y -= ySpeed;
-    } else if (key == "d" || key == "ArrowRight") {
-      camera.rotation.y += ySpeed;
-    } else if (key == "Escape") {
-      isPlay = !isPlay;
-    } else if (key == "+") {
-      camera.fov  -= 10;
-    } else if (key == "-") {
-      camera.fov += 10;
-    }
-
-    camera.updateProjectionMatrix();
-  };
+  clock = new THREE.Clock(true);
 
   document.addEventListener("keydown", onDocumentKeyDown, false);
-
-
-  const animate = () => {
-    requestAnimationFrame( animate );
-
-    renderer.render( scene, camera );
-  };
-
-  animate();
-
-  
-
 }
 
+const animate = () => { // updated once per frame
+  delta = clock.getDelta(); // needs to be called regularly, f.e. here
+
+  requestAnimationFrame( animate );
+  renderer.render( scene, camera );
+};
+
+const onDocumentKeyDown = (event) => { // camera rotation
+   // rotation anngle in degrees
+   const xSpeed = 45 * Math.PI / 180;  
+   const ySpeed = 45 * Math.PI / 180;
+ 
+  const key = event.key;
+  
+  if (key == "w" || key == "ArrowUp") {
+    camera.rotation.x -= xSpeed * delta; // Rotates 1 radian per second
+  } else if (key == "s" || key == "ArrowDown") {
+    camera.rotation.x += xSpeed * delta;
+  } else if (key == "a" || key == "ArrowLeft") {
+    camera.rotation.y -= ySpeed * delta;
+  } else if (key == "d" || key == "ArrowRight") {
+    camera.rotation.y += ySpeed * delta;
+  } else if (key == "Escape") {
+    // isPlay = !isPlay;
+  } else if (key == "+") {
+    camera.fov  -= 10;
+  } else if (key == "-") {
+    camera.fov += 10;
+  }
+
+  camera.updateProjectionMatrix();
+};
 
 export default build;
