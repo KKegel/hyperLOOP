@@ -3,20 +3,15 @@
 import * as THREE from 'three';
 import { Tube, CustomCurve } from 'src/scene/tube';
 import Wizard from './Wizard';
-import { makeLights } from 'src/scene/lights';
 import * as FirstPersonControls from './FirstPersonControls';
-
+import { LightHandler } from 'src/scene/lights';
 FirstPersonControls(THREE);
-
-
 
 declare function require(string): string;
 const audioFile_Rise = require('./sounds/alarms/Rise.mp3');
 const audioFile_Pong = require('./sounds/pong.mp3');
 
-
-const PLAY_AUDIO = false;
-
+const PLAY_AUDIO = true;
 
 
 const build = () => {
@@ -28,9 +23,8 @@ const build = () => {
   this.THREE = THREE;
   const controls = new this.THREE.FirstPersonControls(camera);
 
-    controls.movementSpeed = 10;
-    controls.lookSpeed = 0.1;
-    //controls.lookVertical = true;
+  controls.movementSpeed = 10;
+  controls.lookSpeed = 0.1;
  
   let renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
   let clock :THREE.Clock = new THREE.Clock(true);
@@ -62,26 +56,15 @@ const build = () => {
 
   scene.add(stage);
 
-  //document.addEventListener("keydown", cameraKeyActionHandler.onDocumentKeyDown, false);
+  let lightHandler :LightHandler = new LightHandler(wizard, scene, 5);
+  wizard.addUpdateable(lightHandler);
 
-  makeLights(scene, wizard, 100);
-
-  function playAudio() {
-
-    // var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    // var cube = new THREE.Mesh( geometry, material );
-    // scene.add( cube );
-
+  (() => {
     if(PLAY_AUDIO) {
-       // create an AudioListener and add it to the camera
+     
       var listener = new THREE.AudioListener();
       camera.add( listener );
-
-      // create a global audio source
       var sound = new THREE.Audio( listener );
-
-      // load a sound and set it as the Audio object's buffer
       var audioLoader = new THREE.AudioLoader();
 
       audioLoader.load( audioFile_Rise, function( buffer ) {
@@ -91,35 +74,24 @@ const build = () => {
         sound.play();
       }, null, null);
 
-      // TODO play when intersecting with something
       var sound2 = new THREE.PositionalAudio( listener );
       audioLoader.load( audioFile_Pong, function ( buffer ) {
         sound2.setBuffer( buffer );
         sound.setVolume( 0.5 );
         sound2.setRefDistance( 20 );
-        // sound2.play();
 
       }, null, null );
     }
     //cube.add( sound2 );
-  };
-  playAudio();    
+  })();  
 
-const animate = () => { // updated once per frame
+  const animate = () => {
    
-    let delta :number = clock.getDelta(); // needs to be called regularly, f.e. here
-   
-    //cameraKeyActionHandler.update(delta);
-
-   controls
+    let delta :number = clock.getDelta();
     
-    //stage.applyMatrix(transformation)//camera.getWorldDirection
-    //light.position.set(camera.position.x, camera.position.y, camera.position.z).normalize();
     wizard.update(delta);
-    //controls.update( clock.getDelta() );
     controls.update(delta);
     
-    //stage.position.z = stage.position.z + z;
     stage.lookAt(stage.position);
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
