@@ -22,17 +22,11 @@ export class CustomCurve extends THREE.Curve<THREE.Vector3> {
     
     //console.log(t);
 
-<<<<<<< HEAD
-    var tx = 0;//this.spec.getX(t);
-	  var ty = 0;//this.spec.getY(t);
-	  var tz = t*-20;//this.spec.getZ(t);
-=======
     // var tx = 1;//this.spec.getX(t);
 	  // var tz = 1;//this.spec.getY(t);
     // var ty = 1;//this.spec.getZ(t);
     
     const {x,y,z} = this.spec.getVec(t);
->>>>>>> feature/continiousTubeSpec
   
     return new THREE.Vector3(x,z,-y).multiplyScalar( this.scale );
   }

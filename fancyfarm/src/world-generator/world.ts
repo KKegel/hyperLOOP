@@ -66,7 +66,7 @@ export class World {
       this.calculateProbabilityForDirection(Direction.UP),
       this.calculateProbabilityForDirection(Direction.DOWN),
     ];
-    console.log(probabilities)
+    // console.log(probabilities)
 
     const randomIndex = getRandomIndex(probabilities)
 

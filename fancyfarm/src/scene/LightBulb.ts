@@ -27,7 +27,7 @@ class LightBulb implements Updateable{
 
   public update(dt :number){
     let v3 :Vector3 = this.animator(dt);
-    console.log(v3);
+    // console.log(v3);
     this.light.position.x = v3.x;
     this.light.position.y = v3.y;
     this.light.position.z = v3.z;

@@ -21,7 +21,7 @@ export class SimpleTubeRenderer implements TubeSpec {
     const tFloor = Math.floor(ts); 
     const tCeil = Math.ceil(ts); 
 
-    console.log(tCeil, tFloor, this.queue);
+    // console.log(tCeil, tFloor, this.queue);
 
     const t = ts - tFloor;
 
