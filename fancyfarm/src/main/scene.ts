@@ -23,10 +23,10 @@ const build = () => {
     );
   this.THREE = THREE;
   const controls = new this.THREE.FirstPersonControls(camera);
-
-    controls.movementSpeed = 2;
-    controls.lookSpeed = 0.0//DEBUG_CONTROLS ? 0.3 : 0.2;
-    controls.autoForward = false;//!DEBUG_CONTROLS;
+  
+    controls.movementSpeed = 5;
+    controls.lookSpeed = 0.1//DEBUG_CONTROLS ? 0.3 : 0.2;
+    controls.autoForward = true;//!DEBUG_CONTROLS;
     //controls.lookVertical = true;
     
     const loader = new THREE.ObjectLoader();
@@ -39,7 +39,7 @@ const build = () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  let path: CustomCurve = new CustomCurve(10);
+  let path: CustomCurve = new CustomCurve(20);
   let tube :THREE.Mesh = Tube(path);
 
   tube.matrixAutoUpdate = true;
@@ -61,7 +61,7 @@ const build = () => {
 
   scene.add(stage);
 
-  let lightHandler :LightHandler = new LightHandler(wizard, scene, 5);
+  let lightHandler :LightHandler = new LightHandler(wizard, scene, 15);
   wizard.addUpdateable(lightHandler);
 
   (() => {

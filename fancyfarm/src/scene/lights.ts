@@ -14,23 +14,26 @@ export const makeLight = (id :number) :LightBulb => {
 
     let color :Color = new Color(randomColor());
 
-    console.log(id);
+    //console.log(id);
     let position :GridPoint = world.getBlockByKey(id).position;
+    console.log(position);
 
-    const rx = position.x;
-    const ry = position.y;
-    const rz = position.z;
+    const x = position.x;
+    const y = position.y;
+    const z = position.z;
+
+    const rx = Math.random();
+    const ry = Math.random();
+    const rz = Math.random();
     
     let bulb :LightBulb = new LightBulb(color, id, (dt :number) => {
-      let time :number = Date.now() * 0.0005;
+      let time :number = Date.now() * 0.003;
       
       return new Vector3(
-        rx, ry, rz
-        /*
-        Math.sin( time * rx *0.5),
-        Math.cos( time * ry *0.5),
-        Math.sin( time * rz *0.5)*/
-      );
+        y + Math.sin( time * ry) *0.1,
+        x + Math.cos( time *rx ) *0.1,
+        z + Math.sin( time *rz) *0.1
+      ).multiplyScalar( 20 );
     });
 
    return bulb;
@@ -55,7 +58,7 @@ export class LightHandler implements Updateable{
 
   public update(dt: number) :void {
 
-    console.log("+++ update +++");
+    //console.log("+++ update +++");
 
     let keys :Array<number> = new Array(this.foresight);
 
@@ -63,8 +66,8 @@ export class LightHandler implements Updateable{
       keys[i] = world.getBlock(i).key;
     }
 
-    console.log("foresight", this.foresight);
-    console.log(keys);
+    //console.log("foresight", this.foresight);
+    //console.log(keys);
 
     this.bulbs.forEach((bulb, key) => {
       if(!keys.some(n => n === key)){
