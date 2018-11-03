@@ -1,37 +1,33 @@
+
 import { Color, Vector3 } from "three";
-import * as THREE from "three";
+var randomColor = require('randomcolor'); 
 
-import Animator from './Animator';
-import Updateable from "./Updateable";
+import LightBulb from "./LightBulb";
+import Wizard from "src/main/Wizard";
 
 
-class LightBulb implements Updateable{
+export const makeLights = (scene :THREE.Scene, wizard :Wizard, n :number) :void => {
 
-  private sphere : THREE.SphereBufferGeometry;
-  private light :THREE.PointLight;
+  for(let i :number = 0; i < n; i++){
 
-  private animator :Animator;
+    let color :Color = new Color(randomColor());
 
-  constructor(color :Color, animator :Animator){
-   
-    this.animator = animator;
+    const rx = Math.random();
+    const ry = Math.random();
+    const rz = Math.random();
+    
+    let bulb :LightBulb = new LightBulb(color, (dt :number) => {
+      let time :number = Date.now() * 0.0005;
+      
+      return new Vector3(
+        Math.sin( time * rx *0.5) * 30,
+        Math.cos( time * ry *0.5) * 40,
+        Math.sin( time * rz *0.5) * 30
+      )
+    });
 
-    this.light = new THREE.PointLight(color, 2, 50);
-    this.sphere = new THREE.SphereBufferGeometry( 0.5, 16, 8 );
-    this.light.add( new THREE.Mesh( this.sphere, new THREE.MeshBasicMaterial( { color: color } ) ) );
-  }
-
-  public getLight() :THREE.PointLight {
-    return this.light;
-  }
-
-  public update(dt :number){
-    let v3 :Vector3 = this.animator(dt);
-    this.light.position.x = v3.x;
-    this.light.position.y = v3.y;
-    this.light.position.z = v3.z;
+    wizard.addUpdateable(bulb);
+    scene.add(bulb.getLight());
   }
 
 }
-
-export default LightBulb;

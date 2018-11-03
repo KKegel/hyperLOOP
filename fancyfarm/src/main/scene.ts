@@ -5,6 +5,7 @@ import { Tube, CustomCurve } from 'src/scene/tube';
 import CameraKeyActionHandler from './actions/CameraKeyActionHandler';
 import { render } from 'react-dom';
 import Wizard from './Wizard';
+import { makeLights } from 'src/scene/lights';
 
 
 const build = () => {
@@ -19,12 +20,12 @@ const build = () => {
   
   let stage :THREE.Group = new THREE.Group();
 
-  let light : THREE.DirectionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
-  let light2 :THREE.AmbientLight = new THREE.AmbientLight(0xFFFFFF, 1);
+  //let light : THREE.DirectionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
+  //let light2 :THREE.AmbientLight = new THREE.AmbientLight(0xFFFFFF, 1);
 
-  light.position.set(1, 1, 1).normalize();
-  scene.add(light);
-  scene.add(light2);
+  //light.position.set(1, 1, 1).normalize();
+  //scene.add(light);
+  //scene.add(light2);
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
@@ -53,19 +54,19 @@ const build = () => {
 
   document.addEventListener("keydown", cameraKeyActionHandler.onDocumentKeyDown, false);
 
+  makeLights(scene, wizard, 100);
+
   const animate = () => { // updated once per frame
     const z = 0.05;
     let delta :number = clock.getDelta(); // needs to be called regularly, f.e. here
     
     cameraKeyActionHandler.update(delta);
-    light.position.set(camera.position.x, camera.position.y, camera.position.z).normalize();
+    //light.position.set(camera.position.x, camera.position.y, camera.position.z).normalize();
+    wizard.update(delta);
     
     //stage.position.z = stage.position.z + z;
     stage.lookAt(stage.position);
     requestAnimationFrame(animate);
-
-    wizard.update(delta);
-
     renderer.render(scene, camera);
   };
 

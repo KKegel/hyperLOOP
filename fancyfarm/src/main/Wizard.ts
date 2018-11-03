@@ -19,7 +19,7 @@ class Wizard implements Updateable{
   }
 
   update(dt :number){
-    this.updateables.forEach(u => u.update);
+    this.updateables.forEach(u => u.update(dt));
   }
 
 }
