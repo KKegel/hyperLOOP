@@ -60,7 +60,7 @@ const build = () => {
     cameraKeyActionHandler.update(delta);
     light.position.set(camera.position.x, camera.position.y, camera.position.z).normalize();
     
-    stage.position.z = stage.position.z + z;
+    //stage.position.z = stage.position.z + z;
     stage.lookAt(stage.position);
     requestAnimationFrame(animate);
 

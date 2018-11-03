@@ -1,6 +1,7 @@
 
 import * as THREE from 'three';
 import { type } from 'os';
+import { world } from 'src/world-generator';
 
 
 export class CustomCurve extends THREE.Curve<THREE.Vector3> {
@@ -19,9 +20,11 @@ export class CustomCurve extends THREE.Curve<THREE.Vector3> {
 
   getPoint(t :number) :THREE.Vector3 {
     
-    var tx = 0;
-	  var ty = 0;
-	  var tz = -5*t;
+    console.log(t);
+
+    var tx = 1;//this.spec.getX(t);
+	  var tz = 1;//this.spec.getY(t);
+	  var ty = 1;//this.spec.getZ(t);
   
     return new THREE.Vector3( tx, ty, tz ).multiplyScalar( this.scale );
   }
@@ -37,6 +40,8 @@ export interface TubeSpec {
 }
 
 export const Tube = (path :CustomCurve) : THREE.Mesh => {
+
+  path.update(world.renderer);
 
   var geometry :THREE.TubeBufferGeometry = new THREE.TubeBufferGeometry(path, 100, 8, 16, false);
 
