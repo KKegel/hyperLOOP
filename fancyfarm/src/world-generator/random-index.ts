@@ -11,7 +11,7 @@ export function getRandomIndex(probabilities: number[]): number {
   let lastP = 0.0;
   for(let i=0; i < normProb.length; i++) {
     const p = normProb[i];
-    if(lastP <= r && r < (lastP+p)) {
+    if(lastP < r && r < (lastP+p)) {
       return i;
     } else {
       lastP += p;
