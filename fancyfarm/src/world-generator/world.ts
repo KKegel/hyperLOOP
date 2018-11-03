@@ -50,7 +50,7 @@ export class World {
     const lastBlock = this.queue[this.queue.length - 1];
 
     const isBlocked = this.checkIfBlocked(this.pendingBlockPosition.getNeighborByDirection(direction));
-    const strategyProbability = this.generateStrategy(direction, this.pendingBlockPosition, lastBlock);
+    const strategyProbability = this.generateStrategy(direction, this.pendingBlockPosition, this.queue);
     const isOppositeOfLastBlock = directionOpposite(lastBlock.direction) === direction;
 
     return strategyProbability* (isOppositeOfLastBlock ? 0.0 : 1.0) * (isBlocked ? 0.0 : 1.0);
