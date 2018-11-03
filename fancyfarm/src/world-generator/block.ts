@@ -3,6 +3,7 @@ import { Direction } from './direction';
 
 export class Block {
   constructor(
+    public readonly key: number,
     public position: GridPoint,
     public direction: Direction
   ) {}

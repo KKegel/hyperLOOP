@@ -9,6 +9,7 @@ import { TubeRenderer } from './tube-render-strategy';
 
 export class World {
 
+  private queueCounter: number = 0;
   private queueSize: number;
   private queue: Block[];
   private pendingBlockPosition = new GridPoint(0,0,0);
@@ -29,10 +30,12 @@ export class World {
     this.queue = new Array(this.queueSize)
       .fill(null)
       .map((val, idx) => new Block(
+        idx,
         new GridPoint(0, idx, 0),
         Direction.NORTH
       ));
     this.pendingBlockPosition.y = this.queueSize;
+    this.queueCounter = this.queueSize - 1;
   }
 
   private checkIfBlocked(point: GridPoint) {
@@ -50,7 +53,7 @@ export class World {
     const lastBlock = this.queue[this.queue.length - 1];
 
     const isBlocked = this.checkIfBlocked(this.pendingBlockPosition.getNeighborByDirection(direction));
-    const strategyProbability = this.generateStrategy(direction, this.pendingBlockPosition, lastBlock);
+    const strategyProbability = this.generateStrategy(direction, this.pendingBlockPosition, this.queue);
     const isOppositeOfLastBlock = directionOpposite(lastBlock.direction) === direction;
 
     return strategyProbability* (isOppositeOfLastBlock ? 0.0 : 1.0) * (isBlocked ? 0.0 : 1.0);
@@ -80,8 +83,9 @@ export class World {
     ];
 
     const calculatedDirection = dirArray[randomIndex];
-    
+    this.queueCounter++;
     const newBlock = new Block(
+      this.queueCounter,
       this.pendingBlockPosition,
       calculatedDirection
     );
@@ -90,8 +94,11 @@ export class World {
     this.pendingBlockPosition = this.pendingBlockPosition.getNeighborByDirection(calculatedDirection);
   }
 
-  // getQueue() {
-  //   return this.queue;
-  // }
+  getMinimalBlockKey() {
+    return this.queue[0].key;
+  }
 
+  getBlock(index: number) {
+    return this.queue[index];
+  }
 }

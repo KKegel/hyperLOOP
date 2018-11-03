@@ -22,13 +22,13 @@ export class CustomCurve extends THREE.Curve<THREE.Vector3> {
     
     //console.log(t);
 
-    var tx = 0;//this.spec.getX(t);
-	  var ty = 0;//this.spec.getY(t);
-    var tz = t*50;//this.spec.getZ(t);
+    // var x = 0;
+	  // var y = 0;
+    // var z = t*50;
     
-    //const {x,y,z} = this.spec.getVec(t);
+    const {x,y,z} = this.spec.getVec(t);
   
-    return new THREE.Vector3(tx,ty,-tz).multiplyScalar( this.scale );
+    return new THREE.Vector3(x,y,-z).multiplyScalar( this.scale );
   }
 
 }

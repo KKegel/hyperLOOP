@@ -15,7 +15,7 @@ module.exports = function(THREE) {
 			this.lookSpeed = 0.005;
 
 			this.lookVertical = true;
-			this.autoForward = false; //true
+			this.autoForward = true;
 
 			this.activeLook = true;
 

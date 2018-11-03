@@ -12,6 +12,7 @@ const audioFile_Rise = require('./sounds/alarms/Rise.mp3');
 const audioFile_Pong = require('./sounds/pong.mp3');
 
 const PLAY_AUDIO = false;
+const DEBUG_CONTROLS = false;
 
 
 const build = () => {
@@ -23,8 +24,10 @@ const build = () => {
   this.THREE = THREE;
   const controls = new this.THREE.FirstPersonControls(camera);
 
-  controls.movementSpeed = 10;
-  controls.lookSpeed = 0.1;
+    controls.movementSpeed = 10;
+    controls.lookSpeed = DEBUG_CONTROLS ? 0.4 : 0.05;
+    controls.autoForward = !DEBUG_CONTROLS;
+    //controls.lookVertical = true;
  
   let renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
   let clock :THREE.Clock = new THREE.Clock(true);
