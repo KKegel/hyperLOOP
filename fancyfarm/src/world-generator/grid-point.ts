@@ -67,5 +67,16 @@ export class GridPoint {
       point.y === this.y &&
       point.z === this.z;
   }
+  scalarMult(n: number) {
+    return new GridPoint(n*this.x, n*this.y, n*this.z);
+  }
+  add(point: GridPoint) {
+    return new GridPoint(
+      point.x + this.x,
+      point.y + this.y,
+      point.z + this.z,
+    )
+  }
+
 }
 

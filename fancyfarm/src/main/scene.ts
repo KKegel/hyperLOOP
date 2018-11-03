@@ -64,7 +64,7 @@ const build = () => {
     //light.position.set(camera.position.x, camera.position.y, camera.position.z).normalize();
     wizard.update(delta);
     
-    //stage.position.z = stage.position.z + z;
+    stage.position.z = stage.position.z + z;
     stage.lookAt(stage.position);
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
