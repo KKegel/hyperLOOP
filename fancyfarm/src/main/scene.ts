@@ -73,10 +73,10 @@ const build = () => {
 
   let wizard :Wizard = new Wizard();
 
-  stage.add(new THREE.AmbientLight(0xffffff, 0.5))
+  stage.add(new THREE.AmbientLight(0xffffff, 0.3))
 
-  let light :THREE.DirectionalLight = new THREE.DirectionalLight('#ffffff', 0.5);
-  scene.add(light);
+  //let light :THREE.DirectionalLight = new THREE.DirectionalLight('#ffffff', 0.5);
+  //scene.add(light);
 
   stage.add(tube);
   stage.add(wirelines)
@@ -123,9 +123,9 @@ const build = () => {
     let delta :number = clock.getDelta();
     
     controls.update(delta);
-    light.position.setX(camera.position.x);
-    light.position.setY(camera.position.y);
-    light.position.setZ(camera.position.z);
+    //light.position.setX(camera.position.x);
+    //light.position.setY(camera.position.y);
+    //light.position.setZ(camera.position.z);
     if(plane !== null){
       plane.position.x = camera.position.x;
       plane.position.y = camera.position.y;

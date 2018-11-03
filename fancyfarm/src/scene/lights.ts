@@ -62,7 +62,7 @@ export class LightHandler implements Updateable{
 
     let keys :Array<number> = new Array(this.foresight);
 
-    for(let i: number = 0; i < this.foresight; i++){
+    for(let i: number = 0; i < this.foresight*2; i+=2){
       keys[i] = world.getBlock(i).key;
     }
 
