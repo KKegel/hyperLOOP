@@ -11,12 +11,12 @@ FirstPersonControls(THREE);
 OBJLoaderInjector(THREE);
 
 declare function require(string): string;
-const audioFile_Rise = require('./sounds/alarms/Rise.mp3');
-const audioFile_Pong = require('./sounds/pong.mp3');
+const audioFile_Rise = require('./sounds/8-bit Detective.wav');
+//const audioFile_Pong = require('./sounds/pong.mp3');
 const objFile_paperplane = require('../geometry/paperplane.obj');
 const mtlFile_paperplane = require('../geometry/paperplane.mtl');
 
-const PLAY_AUDIO = false;
+const PLAY_AUDIO = true;
 const DEBUG_CONTROLS = true;
 
 type DeadCallback = () => void;
@@ -109,13 +109,13 @@ const build = (deadCallback :DeadCallback) => {
         sound.play();
       }, null, null);
 
-      var sound2 = new THREE.PositionalAudio( listener );
+      /*var sound2 = new THREE.PositionalAudio( listener );
       audioLoader.load( audioFile_Pong, function ( buffer ) {
         sound2.setBuffer( buffer );
         sound.setVolume( 0.5 );
         sound2.setRefDistance( 20 );
 
-      }, null, null );
+      }, null, null );*/
     }
     //cube.add( sound2 );
   })();  
