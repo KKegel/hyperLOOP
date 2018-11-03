@@ -27,15 +27,22 @@ export class World {
   }
 
   private initGenerating() {
-    this.queue = new Array(this.queueSize)
-      .fill(null)
-      .map((val, idx) => new Block(
-        idx,
-        new GridPoint(0, idx, 0),
-        Direction.NORTH
-      ));
-    this.pendingBlockPosition.y = this.queueSize;
-    this.queueCounter = this.queueSize - 1;
+    // this.queue = new Array(this.queueSize)
+    //   .fill(null)
+    //   .map((val, idx) => new Block(
+    //     idx,
+    //     new GridPoint(0, idx, 0),
+    //     Direction.NORTH
+    //   ));
+    // this.pendingBlockPosition.y = this.queueSize;
+    // this.queueCounter = this.queueSize - 1;
+
+    this.queue = [new Block(this.queueCounter, new GridPoint(0, 0, 0), Direction.NORTH)];
+    this.pendingBlockPosition = new GridPoint(0, 1, 0);
+
+    for(let i=this.queueSize-1; i > 0 ; i--)
+      this.appendNewBlock();
+
   }
 
   private checkIfBlocked(point: GridPoint) {
@@ -51,16 +58,16 @@ export class World {
 
   private calculateProbabilityForDirection(direction: Direction) {
     const lastBlock = this.queue[this.queue.length - 1];
+    console.log(lastBlock, 'lastBlock')
 
     const isBlocked = this.checkIfBlocked(this.pendingBlockPosition.getNeighborByDirection(direction));
     const strategyProbability = this.generateStrategy(direction, this.pendingBlockPosition, this.queue);
     const isOppositeOfLastBlock = directionOpposite(lastBlock.direction) === direction;
 
-    return strategyProbability* (isOppositeOfLastBlock ? 0.0 : 1.0) * (isBlocked ? 0.0 : 1.0);
+    return strategyProbability * (isOppositeOfLastBlock ? 0.0 : 1.0) * (isBlocked ? 0.0 : 1.0);
   }
 
-  public generateNewBlock() {
-    this.queue.shift();
+  private appendNewBlock() {
     const probabilities = [
       this.calculateProbabilityForDirection(Direction.NORTH),
       this.calculateProbabilityForDirection(Direction.SOUTH),
@@ -92,6 +99,11 @@ export class World {
     this.queue.push(newBlock);
 
     this.pendingBlockPosition = this.pendingBlockPosition.getNeighborByDirection(calculatedDirection);
+  }
+
+  public generateNewBlock() {
+    this.queue.shift();
+    this.appendNewBlock();
   }
 
   getMinimalBlockKey() {
