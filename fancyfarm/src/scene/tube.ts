@@ -1,7 +1,7 @@
 
 import * as THREE from 'three';
 import { type } from 'os';
-import { world } from 'src/world-generator';
+import { world } from 'src/world-generator-pro';
 
 
 export class CustomCurve extends THREE.Curve<THREE.Vector3> {
@@ -45,7 +45,7 @@ export interface TubeSpec {
 
 export const Tube = (path :CustomCurve) : THREE.Mesh => {
 
-  path.update(world.renderer);
+  path.update(world);
 
   var geometry :THREE.TubeBufferGeometry = new THREE.TubeBufferGeometry(path, 100, 8, 32, false);
 

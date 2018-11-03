@@ -5,7 +5,8 @@ import Wizard from './Wizard';
 import * as FirstPersonControls from './FirstPersonControls';
 import { LightHandler } from 'src/scene/lights';
 import * as OBJLoaderInjector from './OBJLoader';
-import { OBJLoader } from 'three';
+import { OBJLoader, Euler } from 'three';
+import { world } from 'src/world-generator-pro';
 
 FirstPersonControls(THREE);
 OBJLoaderInjector(THREE);
@@ -29,12 +30,11 @@ const build = () => {
   this.THREE = THREE;
   const controls = new this.THREE.FirstPersonControls(camera);
   
-    controls.movementSpeed = 5;
-    controls.lookSpeed = 0.3//DEBUG_CONTROLS ? 0.3 : 0.2;
-    controls.autoForward = true;//!DEBUG_CONTROLS;
+    controls.movementSpeed = 20;
+    controls.lookSpeed = DEBUG_CONTROLS ? 0.3 : 0.2;
+    controls.autoForward = !DEBUG_CONTROLS;
     //controls.lookVertical = true;
     
-
   
     let plane :THREE.Group = null;
   // Load plane model
@@ -72,6 +72,7 @@ const build = () => {
   let wirelines :THREE.LineSegments = new THREE.LineSegments(wireframe);
 
   let wizard :Wizard = new Wizard();
+  wizard.addUpdateable(world.createUpdateHandler(camera));
 
   stage.add(new THREE.AmbientLight(0xffffff, 0.3))
 
@@ -85,7 +86,7 @@ const build = () => {
   stage.position.y = camera.position.y;
   stage.position.z = camera.position.z;
 
-  camera.position.z = 3;
+  camera.position.z = 0;
 
   scene.add(stage);
 
@@ -116,12 +117,33 @@ const build = () => {
       }, null, null );
     }
     //cube.add( sound2 );
-  })();  
+  })(); 
+
+
+  const geometry = new THREE.BoxBufferGeometry( 2, 0.4, 1 );
+  const material = new THREE.MeshLambertMaterial();
+	const	mesh = new THREE.Mesh( geometry, material );
+  stage.add(mesh);
+
+
+  const v = new THREE.Vector3(5,0,0);
+  const rot = new THREE.Quaternion(0,0,0,0).setFromEuler(new THREE.Euler( 0.1,0,0));
+  const rot2 = new THREE.Quaternion(0,0,0,0).setFromEuler(new THREE.Euler( 0,0.1,0));
+
+  //mesh.setRotationFromEuler(new THREE.Euler(0,0.5,0));
+
+
+  // rot.
 
   const animate = () => {
    
     let delta :number = clock.getDelta();
-    
+    // v.applyEuler(rot);
+    // mesh.position.set(v.x,v.y,v.z);
+    mesh.applyQuaternion(rot2.clone().multiply(rot))
+    // mesh.rotation.y += delta;
+    // mesh.rotation.z += 0;
+
     controls.update(delta);
     //light.position.setX(camera.position.x);
     //light.position.setY(camera.position.y);
