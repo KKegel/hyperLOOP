@@ -1,18 +1,23 @@
 
-
 import * as THREE from 'three';
 import { Tube, CustomCurve } from 'src/scene/tube';
 import Wizard from './Wizard';
 import * as FirstPersonControls from './FirstPersonControls';
 import { LightHandler } from 'src/scene/lights';
+import * as OBJLoaderInjector from './OBJLoader';
+import { OBJLoader } from 'three';
+
 FirstPersonControls(THREE);
+OBJLoaderInjector(THREE);
 
 declare function require(string): string;
 const audioFile_Rise = require('./sounds/alarms/Rise.mp3');
 const audioFile_Pong = require('./sounds/pong.mp3');
+const objFile_paperplane = require('../geometry/paperplane.obj');
+const mtlFile_paperplane = require('../geometry/paperplane.mtl');
 
 const PLAY_AUDIO = false;
-const DEBUG_CONTROLS = false;
+const DEBUG_CONTROLS = true;
 
 
 const build = () => {
@@ -24,12 +29,24 @@ const build = () => {
   this.THREE = THREE;
   const controls = new this.THREE.FirstPersonControls(camera);
 
-    controls.movementSpeed = 2;
-    controls.lookSpeed = 0.0//DEBUG_CONTROLS ? 0.3 : 0.2;
-    controls.autoForward = false;//!DEBUG_CONTROLS;
-    //controls.lookVertical = true;
+  controls.movementSpeed = 2;
+  controls.lookSpeed = DEBUG_CONTROLS ? 0.3 : 0.2;
+  controls.autoForward = false;//!DEBUG_CONTROLS;
+  //controls.lookVertical = true;
     
-    const loader = new THREE.ObjectLoader();
+
+  // Load plane model
+  const loader = new this.THREE.OBJLoader() as OBJLoader;
+  // loader.setMaterials(new THREE.MaterialCreator(mtlFile_paperplane));
+  loader.load(
+    objFile_paperplane,
+    group => {
+      stage.add( group)
+    },
+    // called when loading is in progresses
+    xhr => console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' ),
+    error => console.log( 'An error happened')
+  );
 
   let renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
   let clock :THREE.Clock = new THREE.Clock(true);
@@ -49,6 +66,8 @@ const build = () => {
   let wirelines :THREE.LineSegments = new THREE.LineSegments(wireframe);
 
   let wizard :Wizard = new Wizard();
+
+  stage.add(new THREE.AmbientLight(0xff9933, 1))
 
   stage.add(tube);
   stage.add(wirelines)
