@@ -2,7 +2,9 @@
 import * as THREE from 'three';
 
 import { Tube, CustomCurve } from 'src/scene/tube';
-import CameraKeyActionHandler from './CameraKeyActionHandler';
+import CameraKeyActionHandler from './actions/CameraKeyActionHandler';
+import { render } from 'react-dom';
+import Wizard from './Wizard';
 
 
 const build = () => {
@@ -18,7 +20,7 @@ const build = () => {
   let stage :THREE.Group = new THREE.Group();
 
   let light : THREE.DirectionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
-  var light2 :THREE.AmbientLight = new THREE.AmbientLight(0xFFFFFF, 1);
+  let light2 :THREE.AmbientLight = new THREE.AmbientLight(0xFFFFFF, 1);
 
   light.position.set(1, 1, 1).normalize();
   scene.add(light);
@@ -35,6 +37,8 @@ const build = () => {
 
   let wireframe :THREE.WireframeGeometry = new THREE.WireframeGeometry(tubegeometry);
   let wirelines :THREE.LineSegments = new THREE.LineSegments(wireframe);
+
+  let wizard :Wizard = new Wizard();
 
   stage.add(tube);
   stage.add(wirelines)
@@ -59,6 +63,9 @@ const build = () => {
     stage.position.z = stage.position.z + z;
     stage.lookAt(stage.position);
     requestAnimationFrame(animate);
+
+    wizard.update(delta);
+
     renderer.render(scene, camera);
   };
 
