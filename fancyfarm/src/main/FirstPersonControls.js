@@ -4,6 +4,7 @@ module.exports = function(THREE) {
     
 	THREE.FirstPersonControls = function ( object, domElement ) {
 
+		
 			this.object = object;
 			this.target = new THREE.Vector3( 0, 0, 0 );
 
@@ -208,7 +209,7 @@ module.exports = function(THREE) {
 					if ( this.moveRight ) this.object.translateX( actualMoveSpeed );
 
 					if ( this.moveUp ) this.object.translateY( actualMoveSpeed );
-					if ( this.moveDown ) this.object.translateY( - actualMoveSpeed );
+					if ( this.moveDown ) this.object.translateY( + actualMoveSpeed );
 
 					var actualLookSpeed = delta * this.lookSpeed;
 

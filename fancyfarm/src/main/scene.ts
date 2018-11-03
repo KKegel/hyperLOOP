@@ -30,18 +30,24 @@ const build = () => {
   const controls = new this.THREE.FirstPersonControls(camera);
   
     controls.movementSpeed = 5;
-    controls.lookSpeed = 0.1//DEBUG_CONTROLS ? 0.3 : 0.2;
+    controls.lookSpeed = 0.3//DEBUG_CONTROLS ? 0.3 : 0.2;
     controls.autoForward = true;//!DEBUG_CONTROLS;
     //controls.lookVertical = true;
     
 
+  
+    let plane :THREE.Group = null;
   // Load plane model
   const loader = new this.THREE.OBJLoader() as OBJLoader;
   // loader.setMaterials(new THREE.MaterialCreator(mtlFile_paperplane));
   loader.load(
     objFile_paperplane,
     group => {
-      stage.add( group)
+      plane = group;
+      plane.scale.setX(0.3);
+      plane.scale.setY(0.3);
+      plane.scale.setZ(0.3);
+      scene.add(plane)
     },
     // called when loading is in progresses
     xhr => console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' ),
@@ -67,7 +73,10 @@ const build = () => {
 
   let wizard :Wizard = new Wizard();
 
-  stage.add(new THREE.AmbientLight(0xffffff, 0.3))
+  stage.add(new THREE.AmbientLight(0xffffff, 0.5))
+
+  let light :THREE.DirectionalLight = new THREE.DirectionalLight('#ffffff', 0.5);
+  scene.add(light);
 
   stage.add(tube);
   stage.add(wirelines)
@@ -76,7 +85,7 @@ const build = () => {
   stage.position.y = camera.position.y;
   stage.position.z = camera.position.z;
 
-  camera.position.z = 5;
+  camera.position.z = 3;
 
   scene.add(stage);
 
@@ -112,9 +121,20 @@ const build = () => {
   const animate = () => {
    
     let delta :number = clock.getDelta();
-
-    wizard.update(delta);
+    
     controls.update(delta);
+    light.position.setX(camera.position.x);
+    light.position.setY(camera.position.y);
+    light.position.setZ(camera.position.z);
+    if(plane !== null){
+      plane.position.x = camera.position.x;
+      plane.position.y = camera.position.y;
+      plane.position.z = camera.position.z;
+    }
+    
+    wizard.update(delta);
+    
+
     
     stage.lookAt(stage.position);
     requestAnimationFrame(animate);
