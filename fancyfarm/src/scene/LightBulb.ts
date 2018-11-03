@@ -1,3 +1,4 @@
+
 import { Color, Vector3 } from "three";
 import * as THREE from "three";
 
@@ -9,12 +10,14 @@ class LightBulb implements Updateable{
 
   private sphere : THREE.SphereBufferGeometry;
   private light :THREE.PointLight;
+  private id :number;
 
   private animator :Animator;
 
-  constructor(color :Color, animator :Animator){
+  constructor(color :Color, id :number, animator :Animator){
    
     this.animator = animator;
+    this.id = id;
 
     this.light = new THREE.PointLight(color, 3, 15);
     this.sphere = new THREE.SphereBufferGeometry( 0.5, 16, 8 );
@@ -23,6 +26,10 @@ class LightBulb implements Updateable{
 
   public getLight() :THREE.PointLight {
     return this.light;
+  }
+
+  public getId() :number {
+    return this.id;
   }
 
   public update(dt :number){
