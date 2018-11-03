@@ -16,7 +16,7 @@ export const makeLight = (id :number) :LightBulb => {
 
     //console.log(id);
     let position :GridPoint = world.getBlockByKey(id).position;
-    console.log(position);
+    //console.log(position);
 
     const x = position.x;
     const y = position.y;
@@ -62,7 +62,7 @@ export class LightHandler implements Updateable{
 
     let keys :Array<number> = new Array(this.foresight);
 
-    for(let i: number = 0; i < this.foresight*2; i+=2){
+    for(let i: number = 0; i < this.foresight; i++){
       keys[i] = world.getBlock(i).key;
     }
 

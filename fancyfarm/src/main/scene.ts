@@ -19,8 +19,10 @@ const mtlFile_paperplane = require('../geometry/paperplane.mtl');
 const PLAY_AUDIO = false;
 const DEBUG_CONTROLS = true;
 
+type DeadCallback = () => void;
 
-const build = () => {
+
+const build = (deadCallback :DeadCallback) => {
   
   let scene :THREE.Scene = new THREE.Scene();
   let camera :THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
@@ -30,17 +32,17 @@ const build = () => {
   const controls = new this.THREE.FirstPersonControls(camera);
   
     controls.movementSpeed = 5;
-    controls.lookSpeed = 0.3//DEBUG_CONTROLS ? 0.3 : 0.2;
+    controls.lookSpeed = 0.1//DEBUG_CONTROLS ? 0.3 : 0.2;
     controls.autoForward = true;//!DEBUG_CONTROLS;
     //controls.lookVertical = true;
     
 
   
-    let plane :THREE.Group = null;
+  //  let plane :THREE.Group = null;
   // Load plane model
   const loader = new this.THREE.OBJLoader() as OBJLoader;
   // loader.setMaterials(new THREE.MaterialCreator(mtlFile_paperplane));
-  loader.load(
+  /*loader.load(
     objFile_paperplane,
     group => {
       plane = group;
@@ -52,7 +54,7 @@ const build = () => {
     // called when loading is in progresses
     xhr => console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' ),
     error => console.log( 'An error happened')
-  );
+  );*/
 
   let renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
   let clock :THREE.Clock = new THREE.Clock(true);
@@ -73,7 +75,7 @@ const build = () => {
 
   let wizard :Wizard = new Wizard();
 
-  stage.add(new THREE.AmbientLight(0xffffff, 0.3))
+  stage.add(new THREE.AmbientLight(0xffffff, 0.5))
 
   //let light :THREE.DirectionalLight = new THREE.DirectionalLight('#ffffff', 0.5);
   //scene.add(light);
@@ -85,7 +87,7 @@ const build = () => {
   stage.position.y = camera.position.y;
   stage.position.z = camera.position.z;
 
-  camera.position.z = 3;
+  camera.position.x = 15;
 
   scene.add(stage);
 
@@ -118,19 +120,29 @@ const build = () => {
     //cube.add( sound2 );
   })();  
 
+  
+  let skip :number = 0;
+
   const animate = () => {
+
+    skip = (skip+1)%20;
+
+    
    
     let delta :number = clock.getDelta();
+
+    controls.movementSpeed += delta*0.2;
+    controls.lookSpeed += delta*0.02;
     
     controls.update(delta);
     //light.position.setX(camera.position.x);
     //light.position.setY(camera.position.y);
     //light.position.setZ(camera.position.z);
-    if(plane !== null){
+    /*if(plane !== null){
       plane.position.x = camera.position.x;
       plane.position.y = camera.position.y;
       plane.position.z = camera.position.z;
-    }
+    }*/
     
     wizard.update(delta);
     
@@ -139,6 +151,19 @@ const build = () => {
     stage.lookAt(stage.position);
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
+
+    if(skip === 0){
+      const point = camera.position;
+      const mesh = tube;
+      const raycaster = new THREE.Raycaster()
+      raycaster.set(point, new THREE.Vector3(1,1,1))
+      const intersects = raycaster.intersectObject(mesh)
+      if( intersects.length %2 !== 1) { // Points is in objet
+        console.log('camera outside of tube');
+        deadCallback();
+      }
+    }
+  
   };
 
   animate();
