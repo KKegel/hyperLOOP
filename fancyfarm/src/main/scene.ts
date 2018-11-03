@@ -1,11 +1,14 @@
 
-import * as THREE from 'three';
 
+import * as THREE from 'three';
 import { Tube, CustomCurve } from 'src/scene/tube';
-import CameraKeyActionHandler from './actions/CameraKeyActionHandler';
-import { render } from 'react-dom';
 import Wizard from './Wizard';
 import { makeLights } from 'src/scene/lights';
+import * as FirstPersonControls from './FirstPersonControls';
+
+FirstPersonControls(THREE);
+
+
 
 
 const build = () => {
@@ -14,18 +17,17 @@ const build = () => {
   let camera :THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
     75, window.innerWidth / window.innerHeight, 0.1, 1000
     );
-  let cameraKeyActionHandler :CameraKeyActionHandler = new CameraKeyActionHandler(camera);
+  this.THREE = THREE;
+  const controls = new this.THREE.FirstPersonControls(camera);
+
+    controls.movementSpeed = 10;
+    controls.lookSpeed = 0.1;
+    //controls.lookVertical = true;
+ 
   let renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
   let clock :THREE.Clock = new THREE.Clock(true);
   
   let stage :THREE.Group = new THREE.Group();
-
-  //let light : THREE.DirectionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
-  //let light2 :THREE.AmbientLight = new THREE.AmbientLight(0xFFFFFF, 1);
-
-  //light.position.set(1, 1, 1).normalize();
-  //scene.add(light);
-  //scene.add(light2);
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
@@ -52,19 +54,27 @@ const build = () => {
 
   scene.add(stage);
 
-  document.addEventListener("keydown", cameraKeyActionHandler.onDocumentKeyDown, false);
+  //document.addEventListener("keydown", cameraKeyActionHandler.onDocumentKeyDown, false);
 
   makeLights(scene, wizard, 100);
 
+  let count :number = 0;
+    
   const animate = () => { // updated once per frame
     const z = 0.05;
     let delta :number = clock.getDelta(); // needs to be called regularly, f.e. here
+    count = (count+1)%100;
+    //cameraKeyActionHandler.update(delta);
+
+   controls
     
-    cameraKeyActionHandler.update(delta);
+    //stage.applyMatrix(transformation)//camera.getWorldDirection
     //light.position.set(camera.position.x, camera.position.y, camera.position.z).normalize();
     wizard.update(delta);
+    //controls.update( clock.getDelta() );
+    controls.update(delta);
     
-    stage.position.z = stage.position.z + z;
+    //stage.position.z = stage.position.z + z;
     stage.lookAt(stage.position);
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
