@@ -1,5 +1,5 @@
 {
-  "name": "fancyfarm.io",
+  "name": "hyperloop",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -22,7 +22,8 @@
   },
   "main": "public/electron.js",
   "scripts": {
-    "start": "concurrently \"cross-env BROWSER=none react-scripts-ts start\" \"wait-on http://localhost:3000 && electron .\""
+    "start": "react-scripts-ts start",
+    "start2": "concurrently \"cross-env BROWSER=none react-scripts-ts start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "devDependencies": {
     "@types/jest": "^23.3.9",

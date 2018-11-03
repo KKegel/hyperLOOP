@@ -2,31 +2,33 @@ import * as React from 'react';
 
 import './App.css';
 import build from './main/scene';
+import hyperLOOP from './main/scene';
 
-class App extends React.Component {
 
-  private dead :boolean;
+class App extends React.Component{
 
-  constructor(props){
-    super(props);
-    this.dead = false;
-  }
+  private game :hyperLOOP;
 
   public componentDidMount(){
-    build(() => {
-      //you are dead
-      if(!this.dead){
-        window.confirm('you are dead');
-      }
-      this.dead = true;
-    });
+    this.start();
   }
 
-  public render() {
+  start(){
+    //window.alert("move your mouse to change directions!");
+    this.game = new hyperLOOP(() => {
+      window.alert("you are dead, reload to play again (ctrl+r)");
+      delete this.game;
+      //this.start();
+    });
+  }
+ 
+   public render() {
     
-    return (
-      <div className="App" />
-    );
+    
+      return (  
+        <div className="App" />
+      );
+    
   }
 }
 

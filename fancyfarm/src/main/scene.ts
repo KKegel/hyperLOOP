@@ -22,8 +22,13 @@ const DEBUG_CONTROLS = true;
 type DeadCallback = () => void;
 
 
-const build = (deadCallback :DeadCallback) => {
+class hyperLOOP {
+
+  private THREE;
   
+  constructor(deadCallback :DeadCallback){
+  
+  let dead :boolean = false;
   let scene :THREE.Scene = new THREE.Scene();
   let camera :THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
     75, window.innerWidth / window.innerHeight, 0.1, 1000
@@ -152,13 +157,14 @@ const build = (deadCallback :DeadCallback) => {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
 
-    if(skip === 0){
+    if(skip === 0 && !dead){
       const point = camera.position;
       const mesh = tube;
       const raycaster = new THREE.Raycaster()
       raycaster.set(point, new THREE.Vector3(1,1,1))
       const intersects = raycaster.intersectObject(mesh)
       if( intersects.length %2 !== 1) { // Points is in objet
+        dead = true;
         console.log('camera outside of tube');
         deadCallback();
       }
@@ -168,6 +174,7 @@ const build = (deadCallback :DeadCallback) => {
 
   animate();
 }
+}
 
 
-export default build;
+export default hyperLOOP;
