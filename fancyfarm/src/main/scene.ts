@@ -11,7 +11,7 @@ declare function require(string): string;
 const audioFile_Rise = require('./sounds/alarms/Rise.mp3');
 const audioFile_Pong = require('./sounds/pong.mp3');
 
-const PLAY_AUDIO = true;
+const PLAY_AUDIO = false;
 
 
 const build = () => {
@@ -26,7 +26,7 @@ const build = () => {
   controls.movementSpeed = 10;
   controls.lookSpeed = 0.1;
  
-  let renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer();
+  let renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
   let clock :THREE.Clock = new THREE.Clock(true);
   
   let stage :THREE.Group = new THREE.Group();
@@ -88,7 +88,7 @@ const build = () => {
   const animate = () => {
    
     let delta :number = clock.getDelta();
-    
+
     wizard.update(delta);
     controls.update(delta);
     
