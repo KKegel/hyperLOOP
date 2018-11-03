@@ -29,6 +29,8 @@ const build = () => {
     controls.autoForward = false;//!DEBUG_CONTROLS;
     //controls.lookVertical = true;
     
+    const loader = new THREE.ObjectLoader();
+
   let renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
   let clock :THREE.Clock = new THREE.Clock(true);
   
