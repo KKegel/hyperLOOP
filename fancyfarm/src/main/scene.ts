@@ -7,7 +7,12 @@ import { render } from 'react-dom';
 import Wizard from './Wizard';
 import { makeLights } from 'src/scene/lights';
 
+declare function require(string): string;
+const audioFile_Rise = require('./sounds/alarms/Rise.mp3');
+const audioFile_Pong = require('./sounds/pong.mp3');
 
+
+const PLAY_AUDIO = false;
 
 
 
@@ -59,40 +64,42 @@ const build = () => {
 
   makeLights(scene, wizard, 100);
 
-  var playAudio = function() {
+  function playAudio() {
 
-    var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-    var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    var cube = new THREE.Mesh( geometry, material );
-    scene.add( cube );
+    // var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    // var cube = new THREE.Mesh( geometry, material );
+    // scene.add( cube );
 
-    // create an AudioListener and add it to the camera
-    var listener = new THREE.AudioListener();
-    camera.add( listener );
+    if(PLAY_AUDIO) {
+       // create an AudioListener and add it to the camera
+      var listener = new THREE.AudioListener();
+      camera.add( listener );
 
-    // create a global audio source
-    var sound = new THREE.Audio( listener );
+      // create a global audio source
+      var sound = new THREE.Audio( listener );
 
-    // load a sound and set it as the Audio object's buffer
-    var audioLoader = new THREE.AudioLoader();
+      // load a sound and set it as the Audio object's buffer
+      var audioLoader = new THREE.AudioLoader();
 
-    audioLoader.load( 'sounds/alarms/Rise.mp3', function( buffer ) {
-      sound.setBuffer( buffer );
-      sound.setLoop( true );
-      sound.setVolume( 0.5 );
-      sound.play();
-    }, null, null);
+      audioLoader.load( audioFile_Rise, function( buffer ) {
+        sound.setBuffer( buffer );
+        sound.setLoop( true );
+        sound.setVolume( 0.5 );
+        sound.play();
+      }, null, null);
 
-    // TODO play when intersecting with something
-    var sound2 = new THREE.PositionalAudio( listener );
-    audioLoader.load( 'sounds/pong.mp3', function ( buffer ) {
-      sound2.setBuffer( buffer );
-      sound.setVolume( 0.5 );
-      sound2.setRefDistance( 20 );
-      // sound2.play();
+      // TODO play when intersecting with something
+      var sound2 = new THREE.PositionalAudio( listener );
+      audioLoader.load( audioFile_Pong, function ( buffer ) {
+        sound2.setBuffer( buffer );
+        sound.setVolume( 0.5 );
+        sound2.setRefDistance( 20 );
+        // sound2.play();
 
-    }, null, null );
-    cube.add( sound2 );
+      }, null, null );
+    }
+    //cube.add( sound2 );
   };
   playAudio();    
 
