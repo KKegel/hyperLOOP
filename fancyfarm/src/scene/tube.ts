@@ -38,7 +38,7 @@ interface TubeSpec {
 
 export const Tube = (path :CustomCurve) : THREE.Mesh => {
 
-  var geometry :THREE.TubeBufferGeometry = new THREE.TubeBufferGeometry(path, 64, 8, 16, false);
+  var geometry :THREE.TubeBufferGeometry = new THREE.TubeBufferGeometry(path, 100, 8, 16, false);
 
   var material :THREE.MeshLambertMaterial = new THREE.MeshLambertMaterial( { color: 0xaaccff } );
   material.side = THREE.DoubleSide;
