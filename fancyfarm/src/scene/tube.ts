@@ -22,20 +22,24 @@ export class CustomCurve extends THREE.Curve<THREE.Vector3> {
     
     console.log(t);
 
-    var tx = 1;//this.spec.getX(t);
-	  var tz = 1;//this.spec.getY(t);
-	  var ty = 1;//this.spec.getZ(t);
+    // var tx = 1;//this.spec.getX(t);
+	  // var tz = 1;//this.spec.getY(t);
+    // var ty = 1;//this.spec.getZ(t);
+    
+    const {x,y,z} = this.spec.getVec(t);
   
-    return new THREE.Vector3( tx, ty, tz ).multiplyScalar( this.scale );
+    return new THREE.Vector3(x,z,-y).multiplyScalar( this.scale );
   }
 
 }
 
 export interface TubeSpec {
 
-  getX(t :number) :number;
-  getY(t :number) :number;
-  getZ(t :number) :number;
+  // getX(t :number) :number;
+  // getY(t :number) :number;
+  // getZ(t :number) :number;
+
+  getVec(t: number): {x: number, y: number, z: number};
 
 }
 
