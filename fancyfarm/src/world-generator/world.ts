@@ -101,4 +101,12 @@ export class World {
   getBlock(index: number) {
     return this.queue[index];
   }
+
+  getBlockByKey(key :number){
+    for(let i :number = 0; i < this.queue.length; i++){
+      if(this.queue[i].key === key){
+        return this.queue[i];
+      }
+    }
+  }
 }

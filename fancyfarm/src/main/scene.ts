@@ -24,11 +24,11 @@ const build = () => {
   this.THREE = THREE;
   const controls = new this.THREE.FirstPersonControls(camera);
 
-    controls.movementSpeed = 10;
-    controls.lookSpeed = DEBUG_CONTROLS ? 0.4 : 0.05;
-    controls.autoForward = !DEBUG_CONTROLS;
+    controls.movementSpeed = 2;
+    controls.lookSpeed = 0.0//DEBUG_CONTROLS ? 0.3 : 0.2;
+    controls.autoForward = false;//!DEBUG_CONTROLS;
     //controls.lookVertical = true;
- 
+    
   let renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
   let clock :THREE.Clock = new THREE.Clock(true);
   

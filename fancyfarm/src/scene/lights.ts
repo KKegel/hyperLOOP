@@ -6,27 +6,34 @@ import LightBulb from "./LightBulb";
 import Wizard from "src/main/Wizard";
 import Updateable from "./Updateable";
 
+import { world } from '../world-generator';
+import { GridPoint } from "src/world-generator/grid-point";
 
-export const makeLight = (scene :THREE.Scene, wizard :Wizard, id :number) => {
+
+export const makeLight = (id :number) :LightBulb => {
 
     let color :Color = new Color(randomColor());
 
-    const rx = Math.random();
-    const ry = Math.random();
-    const rz = Math.random();
+    console.log(id);
+    let position :GridPoint = world.getBlockByKey(id).position;
+
+    const rx = position.x;
+    const ry = position.y;
+    const rz = position.z;
     
     let bulb :LightBulb = new LightBulb(color, id, (dt :number) => {
       let time :number = Date.now() * 0.0005;
       
       return new Vector3(
+        rx, ry, rz
+        /*
         Math.sin( time * rx *0.5),
         Math.cos( time * ry *0.5),
-        Math.sin( time * rz *0.5)
-      )
+        Math.sin( time * rz *0.5)*/
+      );
     });
 
-    wizard.addUpdateable(bulb);
-    scene.add(bulb.getLight());
+   return bulb;
   
 }
 
@@ -36,14 +43,47 @@ export class LightHandler implements Updateable{
   private scene :THREE.Scene;
 
   private bulbs :Map<number, LightBulb>;
+  private foresight :number;
 
   constructor(wizard :Wizard, scene :THREE.Scene, foresight :number){
     this.wizard = wizard;
     this.scene = scene;
+    this.foresight = foresight;
+
+    this.bulbs = new Map();
   }
 
   public update(dt: number) :void {
-    //get minimal index, remove bulbs with smaller index
+
+    console.log("+++ update +++");
+
+    let keys :Array<number> = new Array(this.foresight);
+
+    for(let i: number = 0; i < this.foresight; i++){
+      keys[i] = world.getBlock(i).key;
+    }
+
+    console.log("foresight", this.foresight);
+    console.log(keys);
+
+    this.bulbs.forEach((bulb, key) => {
+      if(!keys.some(n => n === key)){
+        this.scene.remove(bulb.getLight());
+        this.wizard.removeUpdateable(bulb);
+        this.bulbs.delete(key);
+      }
+    });
+
+    keys.forEach(key => {
+      if(!this.bulbs.has(key)){
+        //throw new Error();
+        let bulb :LightBulb = makeLight(key);
+        this.bulbs.set(key, bulb);
+        this.wizard.addUpdateable(bulb);
+        this.scene.add(bulb.getLight());
+      }
+    });
+
   }
 
 }

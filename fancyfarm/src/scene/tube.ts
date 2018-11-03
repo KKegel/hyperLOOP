@@ -28,7 +28,7 @@ export class CustomCurve extends THREE.Curve<THREE.Vector3> {
     
     const {x,y,z} = this.spec.getVec(t);
   
-    return new THREE.Vector3(x,y,-z).multiplyScalar( this.scale );
+    return new THREE.Vector3(x, y, z).multiplyScalar( this.scale );
   }
 
 }
@@ -47,7 +47,7 @@ export const Tube = (path :CustomCurve) : THREE.Mesh => {
 
   path.update(world.renderer);
 
-  var geometry :THREE.TubeBufferGeometry = new THREE.TubeBufferGeometry(path, 100, 10, 32, false);
+  var geometry :THREE.TubeBufferGeometry = new THREE.TubeBufferGeometry(path, 100, 8, 32, false);
 
   var material :THREE.MeshLambertMaterial = new THREE.MeshLambertMaterial( { color: 0xaaccff } );
   material.side = THREE.DoubleSide;
