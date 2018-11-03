@@ -5,7 +5,8 @@ import Wizard from './Wizard';
 import * as FirstPersonControls from './FirstPersonControls';
 import { LightHandler } from 'src/scene/lights';
 import * as OBJLoaderInjector from './OBJLoader';
-import { OBJLoader } from 'three';
+import { OBJLoader, Euler } from 'three';
+import { world } from 'src/world-generator-pro';
 
 FirstPersonControls(THREE);
 OBJLoaderInjector(THREE);
@@ -37,11 +38,10 @@ class hyperLOOP {
   const controls = new this.THREE.FirstPersonControls(camera);
   
     controls.movementSpeed = 5;
-    controls.lookSpeed = 0.1//DEBUG_CONTROLS ? 0.3 : 0.2;
-    controls.autoForward = true;//!DEBUG_CONTROLS;
+    controls.lookSpeed = DEBUG_CONTROLS ? 0.3 : 0.2;
+    controls.autoForward = !DEBUG_CONTROLS;
     //controls.lookVertical = true;
     
-
   
   //  let plane :THREE.Group = null;
   // Load plane model
@@ -79,6 +79,7 @@ class hyperLOOP {
   let wirelines :THREE.LineSegments = new THREE.LineSegments(wireframe);
 
   let wizard :Wizard = new Wizard();
+  wizard.addUpdateable(world.createUpdateHandler(camera));
 
   stage.add(new THREE.AmbientLight(0xffffff, 0.5))
 
@@ -123,7 +124,7 @@ class hyperLOOP {
       }, null, null );*/
     }
     //cube.add( sound2 );
-  })();  
+  })(); 
 
   
   let skip :number = 0;
@@ -131,8 +132,6 @@ class hyperLOOP {
   const animate = () => {
 
     skip = (skip+1)%20;
-
-    
    
     let delta :number = clock.getDelta();
 
