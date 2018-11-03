@@ -3,6 +3,7 @@ import { Direction, directionOpposite } from './direction';
 import { getRandomIndex } from './random-index';
 import { Block } from './block';
 import { GeneratorStrategy } from './generator-strategy';
+import { TubeRenderer } from './tube-render-strategy';
 
 
 
@@ -10,7 +11,19 @@ export class World {
 
   private queueSize: number;
   private queue: Block[];
-  private pendingBlockPosition = new GridPoint(0,0,0); 
+  private pendingBlockPosition = new GridPoint(0,0,0);
+
+  public readonly renderer: InstanceType<TubeRenderer>;
+
+  constructor(
+    private readonly generateStrategy: GeneratorStrategy,
+    private readonly tubeRenderStrategy: TubeRenderer,
+    queueSize?: number
+  ) {
+    this.queueSize = queueSize || 10;
+    this.initGenerating();
+    this.renderer = new tubeRenderStrategy(this.queue);
+  }
 
   private initGenerating() {
     this.queue = new Array(this.queueSize)
@@ -41,11 +54,6 @@ export class World {
     const isOppositeOfLastBlock = directionOpposite(lastBlock.direction) === direction;
 
     return strategyProbability* (isOppositeOfLastBlock ? 0.0 : 1.0) * (isBlocked ? 0.0 : 1.0);
-  }
-
-  constructor(private readonly generateStrategy: GeneratorStrategy, queueSize?: number) {
-    this.queueSize = queueSize || 10;
-    this.initGenerating();
   }
 
   public generateNewBlock() {

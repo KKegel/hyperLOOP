@@ -28,7 +28,7 @@ export class CustomCurve extends THREE.Curve<THREE.Vector3> {
 
 }
 
-interface TubeSpec {
+export interface TubeSpec {
 
   getX(t :number) :number;
   getY(t :number) :number;

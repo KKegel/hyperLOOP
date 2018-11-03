@@ -1,8 +1,11 @@
-export { World } from './world'
+import { SimpleTubeRenderer } from './tube-render-strategy';
+import { World } from './world';
+import { SimpleGeneratorStrategy } from './generator-strategy';
 
-// ----------------------------------------------
+export { World } ;
+export { SimpleTubeRenderer };
 
-// const world = new World(SimpleStrategy, 20)
+export const world = new World(SimpleGeneratorStrategy, SimpleTubeRenderer, 100);
 
 // console.log(world.getQueue());
 // for(let i=0; i < 5; i++ ) {

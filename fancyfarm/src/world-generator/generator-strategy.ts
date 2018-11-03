@@ -7,6 +7,6 @@ export interface GeneratorStrategy {
   (direction: Direction, pendingBlockPos: GridPoint, lastBlock: Block): number;
 }
 
-export const SimpleStrategy: GeneratorStrategy = (direction: Direction, pendingBlockPos: GridPoint, lastBlock: Block) => {
+export const SimpleGeneratorStrategy: GeneratorStrategy = (direction: Direction, pendingBlockPos: GridPoint, lastBlock: Block) => {
   return 1.0;
 }
