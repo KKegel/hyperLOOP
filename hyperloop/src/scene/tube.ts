@@ -26,6 +26,8 @@ export class CustomCurve extends THREE.Curve<THREE.Vector3> {
 	  // var y = 0;
     // var z = t*50;
     
+
+    
     const {x,y,z} = this.spec.getVec(t);
   
     return new THREE.Vector3(z, y, -x).multiplyScalar( this.scale );
