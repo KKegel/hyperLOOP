@@ -18,7 +18,7 @@ const objFile_paperplane = require('../geometry/paperplane.obj');
 const mtlFile_paperplane = require('../geometry/paperplane.mtl');
 
 const PLAY_AUDIO = false;//true;
-const DEBUG_CONTROLS = true;
+const DEBUG_CONTROLS = false;//true;
 
 type DeadCallback = () => void;
 
@@ -101,7 +101,7 @@ class hyperLOOP {
 
   scene.add(stage);
 
-  let lightHandler :LightHandler = new LightHandler(wizard, scene, 12);
+  let lightHandler :LightHandler = new LightHandler(wizard, scene, 14);
   wizard.addUpdateable(lightHandler);
 
   (() => {
@@ -181,12 +181,12 @@ class hyperLOOP {
     stage.lookAt(stage.position);
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
-/*
+
     if(skip === 0 && !dead){
       const point = camera.position;
       const mesh = tube;
       const raycaster = new THREE.Raycaster()
-      raycaster.set(point, new THREE.Vector3(1,1,1))
+      raycaster.set(point, camera.position.clone().normalize())
       const intersects = raycaster.intersectObject(mesh)
       if( intersects.length %2 !== 1) { // Points is in objet
         dead = true;
@@ -194,7 +194,7 @@ class hyperLOOP {
         deadCallback();
       }
     }
-  */
+  
   };
 
   animate();
