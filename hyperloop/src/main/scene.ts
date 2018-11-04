@@ -137,28 +137,29 @@ class hyperLOOP {
   let oldhead = world.queue[0].key;
 
   var mouse = new THREE.Vector2(), INTERSECTED;
+
+  const onDocumentMouseMove = ( event ) => {
+    event.preventDefault();
+    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+  }
+
+  document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
   const animate = () => {
 
-    skip = (skip+1)%10;
+    skip = 0;//(skip+1)%5;
    
     let delta :number = clock.getDelta();
 
-    
-    //stage.remove(wirelines);
     if(world.queue[0].key !== oldhead){
       stage.remove(tube);
       oldhead = world.queue[0].key;
       let path: CustomCurve = new CustomCurve(20);
     tube = Tube(path);
     let tubegeometry = tube.geometry;
-    //let wireframe :THREE.WireframeGeometry = new THREE.WireframeGeometry(tubegeometry);
-    //wirelines  = new THREE.LineSegments(wireframe,new THREE.MeshLambertMaterial( { color: 0x000000 } ));
     stage.add(tube);
     }
-    
-    //stage.add(wirelines);
-
-    
 
     controls.movementSpeed += delta*0.2;
     controls.lookSpeed += delta*0.02;
@@ -166,15 +167,6 @@ class hyperLOOP {
     world.setK(world.k + delta*1.1);
 
     controls.update(delta);
-    //light.position.setX(camera.position.x);
-    //light.position.setY(camera.position.y);
-    //light.position.setZ(camera.position.z);
-    /*if(plane !== null){
-      plane.position.x = camera.position.x;
-      plane.position.y = camera.position.y;
-      plane.position.z = camera.position.z;
-    }*/
-    
     wizard.update(delta);
     
 
@@ -197,20 +189,24 @@ class hyperLOOP {
 
       // check mouse over light bulb
       const lightRaycaster = new THREE.Raycaster();
-      raycaster.setFromCamera( mouse, camera );
+      lightRaycaster.setFromCamera( mouse, camera );
 
-      let bulbs;
-      lightHandler.getBulbs().forEach((bulb, key) => {
-        bulbs.add( bulb.getGeometry() );
+      let arr :Array<THREE.Mesh> = new Array();
+      let map = lightHandler.getBulbs();
+      let i = 0;
+
+      map.forEach((bulb, key) => {
+        arr[i] = bulb.getMesh();
+        i++;
       });
   
-      var bulbsIntersects = lightRaycaster.intersectObjects( bulbs );
+      var bulbsIntersects = lightRaycaster.intersectObjects( arr );
       if ( bulbsIntersects.length > 0 ) {
         if ( INTERSECTED != intersects[ 0 ].object ) {
           if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
           INTERSECTED = intersects[ 0 ].object;
           INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-          INTERSECTED.material.emissive.setHex( 0xff0000 );
+          INTERSECTED.material.emissive.setHex( 0xffffff );
         }
       } else {
         if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
