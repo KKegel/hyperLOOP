@@ -1,0 +1,8 @@
+{
+  "short_name": "hyperLOOP",
+  "name": "a three.js typescript game",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
