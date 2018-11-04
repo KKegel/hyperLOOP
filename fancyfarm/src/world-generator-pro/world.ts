@@ -3,8 +3,11 @@ import { TubeSpec } from 'src/scene/tube';
 import * as THREE from 'three';
 import Updateable from 'src/scene/Updateable';
 
-class CurveElement {
-  position: Vector3;
+class PathElement {
+  constructor(
+    public position: Vector3,
+    public key: number
+  ) {}
 }
 
 class WorldUpdateHandler implements Updateable{
@@ -18,8 +21,9 @@ class WorldUpdateHandler implements Updateable{
 }
 
 export class World implements TubeSpec {
-  public queue: Vector3[] = [];
+  public queue: PathElement[] = [];
 
+  private nextKey = 0;
   private lastPathSegment: Vector3;
   private maxOffset: number;
   private len_square: number;
@@ -41,7 +45,8 @@ export class World implements TubeSpec {
   }
 
   private initWorld() {
-    this.queue = [new Vector3(0,0,0)]
+    this.queue = [new PathElement(new Vector3(0,0,0), this.nextKey)]
+    this.nextKey++;
     for(let i=0; i < this.queueSize; i++) {
       this.pushNextElement();
     }
@@ -66,10 +71,14 @@ export class World implements TubeSpec {
 
   private pushNextElement() {
     this.queue.push(
-      this.queue[this.queue.length-1]
-        .clone()
-        .add(this.calcRandomSegment())
+      new PathElement(
+        this.queue[this.queue.length-1].position
+          .clone()
+          .add(this.calcRandomSegment()),
+          this.nextKey
+      )
     )
+    this.nextKey++;
   }
 
   createUpdateHandler(player: {position: Vector3}) {
@@ -83,7 +92,7 @@ export class World implements TubeSpec {
   }
 
   checkUpdateStatus(pos: Vector3): boolean {
-    return this.queue[0].clone().sub(pos).lengthSq() > this.len_square + 1000;
+    return this.queue[0].position.clone().sub(pos).lengthSq() > this.len_square + 1000;
   }
 
   getVec(t_: number) {
@@ -93,8 +102,8 @@ export class World implements TubeSpec {
 
     const t = ts - tFloor;
 
-    const lowerVec = this.queue[tFloor].clone().multiplyScalar(1-t);
-    const higherVec = this.queue[tCeil].clone().multiplyScalar(t);
+    const lowerVec = this.queue[tFloor].position.clone().multiplyScalar(1-t);
+    const higherVec = this.queue[tCeil].position.clone().multiplyScalar(t);
 
     return lowerVec.add(higherVec);
   }
