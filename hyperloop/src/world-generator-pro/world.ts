@@ -116,6 +116,9 @@ export class World implements TubeSpec {
     const lowerVec = this.queue[tFloor].position.clone().multiplyScalar(1-t);
     const higherVec = this.queue[tCeil].position.clone().multiplyScalar(t);
 
+    if(tCeil === this.queueSize - 1)
+      higherVec.add(new Vector3(0,this.len*1.5,0))
+
     return lowerVec.add(higherVec).multiplyScalar(this.scale);
   }
 
