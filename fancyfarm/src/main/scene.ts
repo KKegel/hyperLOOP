@@ -141,7 +141,7 @@ class hyperLOOP {
     tube = Tube(path);
     let tubegeometry = tube.geometry;
     let wireframe :THREE.WireframeGeometry = new THREE.WireframeGeometry(tubegeometry);
-    wirelines  = new THREE.LineSegments(wireframe);
+    wirelines  = new THREE.LineSegments(wireframe,new THREE.MeshLambertMaterial( { color: 0x000000 } ));
     stage.add(tube);
     stage.add(wirelines);
 
