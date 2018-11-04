@@ -47,7 +47,7 @@ export const Tube = (path :CustomCurve) : THREE.Mesh => {
 
   path.update(world);
 
-  var geometry :THREE.TubeBufferGeometry = new THREE.TubeBufferGeometry(path, 100, 8, 32, false);
+  var geometry :THREE.TubeBufferGeometry = new THREE.TubeBufferGeometry(path, 100, 10, 64, false);
 
  // var texture = new THREE.TextureLoader().load( 'textures/crate.gif' );
   var material :THREE.MeshLambertMaterial = new THREE.MeshLambertMaterial( { color: 0x888888 } );

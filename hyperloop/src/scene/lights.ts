@@ -70,6 +70,7 @@ export class LightHandler implements Updateable{
 
     this.bulbs.forEach((bulb, key) => {
       if(!keys.some(n => n === key)){
+        
         this.scene.remove(bulb.getLight());
         this.wizard.removeUpdateable(bulb);
         this.bulbs.delete(key);
@@ -86,6 +87,10 @@ export class LightHandler implements Updateable{
       }
     });
 
+  }
+
+  getBulbs() :Map<number, LightBulb>{
+    return this.bulbs;
   }
 
 }

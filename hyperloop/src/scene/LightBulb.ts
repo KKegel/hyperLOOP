@@ -20,12 +20,16 @@ class LightBulb implements Updateable{
     this.id = id;
 
     this.light = new THREE.PointLight(color, 9, 12);
-    this.sphere = new THREE.SphereBufferGeometry( 0.3, 64, 9 );
+    this.sphere = new THREE.SphereBufferGeometry( 0.7, 64, 9 );
     this.light.add( new THREE.Mesh( this.sphere, new THREE.MeshBasicMaterial( { color: color } ) ) );
   }
 
   public getLight() :THREE.PointLight {
     return this.light;
+  }
+
+  getGeometry() :THREE.SphereBufferGeometry {
+    return this.sphere;
   }
 
   public getId() :number {
