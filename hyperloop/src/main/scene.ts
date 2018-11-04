@@ -234,7 +234,7 @@ class hyperLOOP {
       const raycaster = new THREE.Raycaster()
       raycaster.set(point, camera.position.clone().normalize())
       const intersects = raycaster.intersectObject(mesh)
-      if( intersects.length == 0) { // Points is in objet
+      if( intersects.length %2 == 0) { // Points is in objet
         dead = true;
         console.log('camera outside of tube');
         deadCallback();
