@@ -136,6 +136,7 @@ class hyperLOOP {
  
   let oldhead = world.queue[0].key;
 
+  var mouse = new THREE.Vector2(), INTERSECTED;
   const animate = () => {
 
     skip = (skip+1)%10;
@@ -193,13 +194,42 @@ class hyperLOOP {
         console.log('camera outside of tube');
         deadCallback();
       }
+
+      // check mouse over light bulb
+      const lightRaycaster = new THREE.Raycaster();
+      raycaster.setFromCamera( mouse, camera );
+
+      let bulbs;
+      lightHandler.getBulbs().forEach((bulb, key) => {
+        bulbs.add( bulb.getGeometry() );
+      });
+  
+      var bulbsIntersects = lightRaycaster.intersectObjects( bulbs );
+      if ( bulbsIntersects.length > 0 ) {
+        if ( INTERSECTED != intersects[ 0 ].object ) {
+          if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+          INTERSECTED = intersects[ 0 ].object;
+          INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+          INTERSECTED.material.emissive.setHex( 0xff0000 );
+        }
+      } else {
+        if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+        INTERSECTED = null;
+      }
+
     }
+
+    
+
   
   };
 
   animate();
 }
+
 }
+
+
 
 
 export default hyperLOOP;
