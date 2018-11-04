@@ -17,7 +17,7 @@ const audioFile_Rise = require('./sounds/8-bit Detective.wav');
 const objFile_paperplane = require('../geometry/paperplane.obj');
 const mtlFile_paperplane = require('../geometry/paperplane.mtl');
 
-const PLAY_AUDIO = true;
+const PLAY_AUDIO = false;//true;
 const DEBUG_CONTROLS = true;
 
 type DeadCallback = () => void;
@@ -75,8 +75,8 @@ class hyperLOOP {
   tube.matrixAutoUpdate = true;
   let tubegeometry = tube.geometry;
 
-  let wireframe :THREE.WireframeGeometry = new THREE.WireframeGeometry(tubegeometry);
-  let wirelines :THREE.LineSegments = new THREE.LineSegments(wireframe);
+  //let wireframe :THREE.WireframeGeometry = new THREE.WireframeGeometry(tubegeometry);
+  //let wirelines :THREE.LineSegments = new THREE.LineSegments(wireframe);
 
   let wizard :Wizard = new Wizard();
   wizard.addUpdateable(world.createUpdateHandler(camera));
@@ -87,17 +87,21 @@ class hyperLOOP {
   //scene.add(light);
 
   stage.add(tube);
-  stage.add(wirelines)
+  //stage.add(wirelines)
 
   stage.position.x = camera.position.x;
   stage.position.y = camera.position.y;
   stage.position.z = camera.position.z;
 
-  //camera.position.x = 15;
+  camera.position.x = world.getVec(0.05).multiplyScalar(20).z
+  camera.position.y = world.getVec(0.05).multiplyScalar(20).y;
+  camera.position.z = -world.getVec(0.05).multiplyScalar(20).x;
+
+
 
   scene.add(stage);
 
-  let lightHandler :LightHandler = new LightHandler(wizard, scene, 15);
+  let lightHandler :LightHandler = new LightHandler(wizard, scene, 12);
   wizard.addUpdateable(lightHandler);
 
   (() => {
@@ -129,21 +133,31 @@ class hyperLOOP {
   
   let skip :number = 0;
 
+ 
+  let oldhead = world.queue[0].key;
+
   const animate = () => {
 
     skip = (skip+1)%20;
    
     let delta :number = clock.getDelta();
 
-    stage.remove(tube);
-    stage.remove(wirelines);
-    let path: CustomCurve = new CustomCurve(20);
+    
+    //stage.remove(wirelines);
+    if(world.queue[0].key !== oldhead){
+      stage.remove(tube);
+      oldhead = world.queue[0].key;
+      let path: CustomCurve = new CustomCurve(20);
     tube = Tube(path);
     let tubegeometry = tube.geometry;
-    let wireframe :THREE.WireframeGeometry = new THREE.WireframeGeometry(tubegeometry);
-    wirelines  = new THREE.LineSegments(wireframe,new THREE.MeshLambertMaterial( { color: 0x000000 } ));
+    //let wireframe :THREE.WireframeGeometry = new THREE.WireframeGeometry(tubegeometry);
+    //wirelines  = new THREE.LineSegments(wireframe,new THREE.MeshLambertMaterial( { color: 0x000000 } ));
     stage.add(tube);
-    stage.add(wirelines);
+    }
+    
+    //stage.add(wirelines);
+
+    
 
     controls.movementSpeed += delta*0.2;
     controls.lookSpeed += delta*0.02;
@@ -167,8 +181,8 @@ class hyperLOOP {
     stage.lookAt(stage.position);
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
-
-    /*if(skip === 0 && !dead){
+/*
+    if(skip === 0 && !dead){
       const point = camera.position;
       const mesh = tube;
       const raycaster = new THREE.Raycaster()
@@ -179,8 +193,8 @@ class hyperLOOP {
         console.log('camera outside of tube');
         deadCallback();
       }
-    }*/
-  
+    }
+  */
   };
 
   animate();
