@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { type } from 'os';
 import { world } from 'src/world-generator-pro';
+import { Vector3 } from 'three';
 
 
 export class CustomCurve extends THREE.Curve<THREE.Vector3> {
@@ -9,40 +10,23 @@ export class CustomCurve extends THREE.Curve<THREE.Vector3> {
   private scale :number;
   private spec :TubeSpec;
 
-  constructor(scale :number){
+  constructor(){
     super();
-    this.scale = ( scale === undefined ) ? 1 : scale;
+    // this.scale = ( scale === undefined ) ? 1 : scale;
   }
 
   update(spec :TubeSpec){
     this.spec = spec;
   }
 
-  getPoint(t :number) :THREE.Vector3 {
-    
-    //console.log(t);
-
-    // var x = 0;
-	  // var y = 0;
-    // var z = t*50;
-    
-
-
-    const {x,y,z} = this.spec.getVec(t);
-  
-    return new THREE.Vector3(z, y, -x).multiplyScalar( this.scale );
+  getPoint(t :number) :THREE.Vector3 { 
+    return this.spec.getVec(t);
   }
 
 }
 
 export interface TubeSpec {
-
-  // getX(t :number) :number;
-  // getY(t :number) :number;
-  // getZ(t :number) :number;
-
-  getVec(t: number): {x: number, y: number, z: number};
-
+  getVec(t: number): Vector3;
 }
 
 export const Tube = (path :CustomCurve) : THREE.Mesh => {

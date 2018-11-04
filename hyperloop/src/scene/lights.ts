@@ -17,9 +17,9 @@ export const makeLight = (id :number) :LightBulb => {
     let position = world.getBlockById(id).position;
     //console.log(position);
 
-    const x = position.x;
-    const y = position.y;
-    const z = position.z;
+    const {x,y,z} = position;
+    // const y = position.y;
+    // const z = position.z;
 
     const rx = Math.random();
     const ry = Math.random();
@@ -29,9 +29,9 @@ export const makeLight = (id :number) :LightBulb => {
       let time :number = Date.now() * 0.003;
       
       return new Vector3(
-        z + Math.sin( time * ry) *0.1,
+        x + Math.sin( time * ry) *0.1,
         y + Math.cos( time * rx) *0.1,
-        -x + Math.sin( time *rz) *0.1
+        z + Math.sin( time *rz) *0.1
       ).multiplyScalar( 20 );
     });
 

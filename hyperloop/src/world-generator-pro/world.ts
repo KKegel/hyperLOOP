@@ -28,7 +28,7 @@ export class World implements TubeSpec {
   private nextKey = 0;
   private lastPathSegment: Vector3;
   private maxOffset: number;
-  private len_square: number;
+  private minDistance: number;
 
   /**
    * 
@@ -38,17 +38,28 @@ export class World implements TubeSpec {
   constructor(
     private readonly len: number,
     public k: number,
-    private readonly queueSize: number
+    private readonly queueSize: number,
+    public readonly scale: number,
+    private readonly straightElementsNumber: number
   ) {
     this.maxOffset = k * len;
-    this.len_square = len * len;
+    this.minDistance = 0.5 * (len*scale*queueSize) * (len*scale*queueSize) ;
     this.lastPathSegment = new Vector3(this.len, 0, 0);
     this.initWorld();    
   }
 
   private initWorld() {
-    this.queue = [new PathElement(new Vector3(0,0,0), this.nextKey)]
+    this.queue = [new PathElement(new Vector3(0,0,0), this.nextKey)];
     this.nextKey++;
+    for(let j=0; j < this.straightElementsNumber; j++) {
+      this.queue.push(
+        new PathElement(
+          this.queue[this.queue.length-1].position.clone().add(this.lastPathSegment),
+          this.nextKey
+      ));
+      this.nextKey++;
+    }
+    
     for(let i=0; i < this.queueSize; i++) {
       this.pushNextElement();
     }
@@ -97,17 +108,15 @@ export class World implements TubeSpec {
     console.log('new')
   }
 
-  checkUpdateStatus({x,y,z}: Vector3): boolean {
-    const s = 1/20;
-
-    const fpos = this.queue[this.queue.length-1].position.clone();
+  checkUpdateStatus(player: Vector3): boolean {
+    const fpos = this.getVec(1);
     console.log(fpos);
-    const dist = fpos.sub(new Vector3(s*x,s*y,-s*z)).lengthSq();
-    console.log(dist)
-    return dist < 100;
+    const dist = fpos.sub(player).lengthSq();
+    console.log(dist, this.minDistance)
+    return dist < this.minDistance;
   }
 
-  getVec(t_: number) {
+  getVec(t_: number): Vector3 {
     const ts = t_ * (this.queueSize - 1);
     const tFloor = Math.floor(ts); 
     const tCeil = Math.ceil(ts); 
@@ -117,7 +126,10 @@ export class World implements TubeSpec {
     const lowerVec = this.queue[tFloor].position.clone().multiplyScalar(1-t);
     const higherVec = this.queue[tCeil].position.clone().multiplyScalar(t);
 
-    return lowerVec.add(higherVec);
+    if(tCeil === this.queueSize - 1)
+      higherVec.add(new Vector3(0,this.len*1.5,0))
+
+    return lowerVec.add(higherVec).multiplyScalar(this.scale);
   }
 
   getBlockById(id :number){

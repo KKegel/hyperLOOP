@@ -5,7 +5,7 @@ import Wizard from './Wizard';
 import * as FirstPersonControls from './FirstPersonControls';
 import { LightHandler } from 'src/scene/lights';
 import * as OBJLoaderInjector from './OBJLoader';
-import { OBJLoader, Euler } from 'three';
+import { OBJLoader, Euler, PerspectiveCamera, Vector3 } from 'three';
 import { world } from 'src/world-generator-pro';
 
 FirstPersonControls(THREE);
@@ -21,6 +21,19 @@ const PLAY_AUDIO = true;//true;
 const DEBUG_CONTROLS = false;//true;
 
 type DeadCallback = () => void;
+
+
+
+
+
+function setPlayerOffset(camera: PerspectiveCamera) {
+  camera.position.x = world.getVec(0.05).x
+  camera.position.y = world.getVec(0.05).y;
+  camera.position.z = world.getVec(0.05).z;
+}
+
+
+
 
 
 class hyperLOOP {
@@ -41,7 +54,9 @@ class hyperLOOP {
     this.timeText.style.textAlign = 'center';
     this.timeText.style.fontSize = "60px";
     this.timeText.style.color = "white";
-    this.timeText.style.fontFamily = "Monospaced";
+    this.timeText.style.textShadow = "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black";
+    this.timeText.style.fontFamily = "Space Mono, monospace";
+    this.timeText.style.zIndex = 10;
     this.timeText.innerHTML = '0';    
     container.appendChild( this.timeText );
     
@@ -59,6 +74,7 @@ class hyperLOOP {
   let camera :THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
     75, window.innerWidth / window.innerHeight, 0.1, 1000
     );
+  camera.lookAt(new Vector3(-1,0,0));
   this.THREE = THREE;
   const controls = new this.THREE.FirstPersonControls(camera);
   
@@ -94,7 +110,7 @@ class hyperLOOP {
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  let path: CustomCurve = new CustomCurve(20);
+  let path: CustomCurve = new CustomCurve();
   let tube :THREE.Mesh = Tube(path);
 
   tube.matrixAutoUpdate = true;
@@ -114,19 +130,11 @@ class hyperLOOP {
   stage.add(tube);
   //stage.add(wirelines)
 
-  stage.position.x = camera.position.x;
-  stage.position.y = camera.position.y;
-  stage.position.z = camera.position.z;
-
-  camera.position.x = world.getVec(0.05).multiplyScalar(20).z
-  camera.position.y = world.getVec(0.05).multiplyScalar(20).y;
-  camera.position.z = -world.getVec(0.05).multiplyScalar(20).x;
-
-
+  setPlayerOffset(camera);
 
   scene.add(stage);
 
-  let lightHandler :LightHandler = new LightHandler(wizard, scene, 15);
+  let lightHandler :LightHandler = new LightHandler(wizard, scene, 14);
   wizard.addUpdateable(lightHandler);
 
   (() => {
@@ -200,7 +208,7 @@ class hyperLOOP {
     if(world.queue[0].key !== oldhead){
       stage.remove(tube);
       oldhead = world.queue[0].key;
-      let path: CustomCurve = new CustomCurve(20);
+      let path: CustomCurve = new CustomCurve();
     tube = Tube(path);
     let tubegeometry = tube.geometry;
     stage.add(tube);
@@ -209,7 +217,7 @@ class hyperLOOP {
     controls.movementSpeed += delta*0.2;
     controls.lookSpeed += delta*0.02;
     
-    world.setK(world.k + delta*1.1);
+    world.setK(world.k + delta*10);
 
     controls.update(delta);
     wizard.update(delta);
@@ -243,7 +251,7 @@ class hyperLOOP {
       map.forEach((bulb, key) => {
         arr[i] = bulb.getMesh();
         i++;
-      });
+    });
   
       var bulbsIntersects = lightRaycaster.intersectObjects( arr );
 

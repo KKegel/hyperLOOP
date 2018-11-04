@@ -16,7 +16,8 @@ class App extends React.Component{
   start(){
     //window.alert("move your mouse to change directions!");
     this.game = new hyperLOOP(() => {
-      window.alert("you are dead, reload to play again (ctrl+r)");
+      // window.alert("you are dead, reload to play again (ctrl+r)");
+      location.reload();
       delete this.game;
       //this.start();
     });
