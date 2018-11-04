@@ -1,3 +1,3 @@
 import { World } from './world';
 
-export const world = new World(1, 20, 20);
+export const world = new World(1, 5, 20);

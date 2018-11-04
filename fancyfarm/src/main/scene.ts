@@ -148,6 +148,8 @@ class hyperLOOP {
     controls.movementSpeed += delta*0.2;
     controls.lookSpeed += delta*0.02;
     
+    world.setK(world.k + delta*1.1);
+
     controls.update(delta);
     //light.position.setX(camera.position.x);
     //light.position.setY(camera.position.y);

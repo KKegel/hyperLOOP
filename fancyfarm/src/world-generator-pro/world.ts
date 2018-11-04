@@ -37,7 +37,7 @@ export class World implements TubeSpec {
    */
   constructor(
     private readonly len: number,
-    private readonly k: number,
+    public k: number,
     private readonly queueSize: number
   ) {
     this.maxOffset = k * len;
@@ -81,6 +81,10 @@ export class World implements TubeSpec {
       )
     )
     this.nextKey++;
+  }
+
+  setK(k: number) {
+    this.maxOffset = this.len*k;
   }
 
   createUpdateHandler(player: {position: Vector3}) {
