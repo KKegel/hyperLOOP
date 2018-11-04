@@ -27,17 +27,29 @@ class hyperLOOP {
 
   private THREE;
   
+  private timeText;
+  private time = 0;
+  private clock:THREE.Clock;
+
   addTimer() {
     const container = document.createElement( 'div' );
     document.body.appendChild( container );
-    var info = document.createElement( 'div' );
-    info.style.position = 'absolute';
-    info.style.top = '10px';
-    info.style.width = '100%';
-    info.style.textAlign = 'center';
-    info.innerHTML = 'TIME: ';
-    container.appendChild( info );
+    this.timeText = document.createElement( 'h1' );
+    this.timeText.style.position = 'absolute';
+    this.timeText.style.marginTop = '1px';
+    this.timeText.style.width = '100%';
+    this.timeText.style.textAlign = 'center';
+    this.timeText.style.fontSize = "60px";
+    this.timeText.style.color = "white";
+    this.timeText.style.fontFamily = "Monospaced";
+    this.timeText.innerHTML = '0';    
+    container.appendChild( this.timeText );
     
+  }
+
+  updateTimer() {
+    this.time++;
+    this.timeText.innerHTML = this.time.toString();
   }
   constructor(deadCallback :DeadCallback){
   
@@ -50,7 +62,7 @@ class hyperLOOP {
   this.THREE = THREE;
   const controls = new this.THREE.FirstPersonControls(camera);
   
-    controls.movementSpeed = 5;
+    controls.movementSpeed = 10;
     controls.lookSpeed = DEBUG_CONTROLS ? 0.3 : 0.2;
     controls.autoForward = !DEBUG_CONTROLS;
     //controls.lookVertical = true;
@@ -75,7 +87,7 @@ class hyperLOOP {
   );*/
 
   let renderer: THREE.WebGLRenderer = new THREE.WebGLRenderer({antialias: true});
-  let clock :THREE.Clock = new THREE.Clock(true);
+  this.clock  = new THREE.Clock(true);
   
   let stage :THREE.Group = new THREE.Group();
 
@@ -159,11 +171,18 @@ class hyperLOOP {
 
   document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
+  let updateClockTime = 1;
+  let passed = 0;
   const animate = () => {
-
+    
     skip = 0;//(skip+1)%5;
    
-    let delta :number = clock.getDelta();
+    let delta :number = this.clock.getDelta();
+    passed += delta;
+    if (passed > updateClockTime ) {
+      this.updateTimer();
+      passed = 0;
+    }
 
     if(world.queue[0].key !== oldhead){
       stage.remove(tube);
