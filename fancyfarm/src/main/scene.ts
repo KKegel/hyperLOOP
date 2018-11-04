@@ -93,7 +93,7 @@ class hyperLOOP {
   stage.position.y = camera.position.y;
   stage.position.z = camera.position.z;
 
-  camera.position.x = 15;
+  //camera.position.x = 15;
 
   scene.add(stage);
 
@@ -135,6 +135,16 @@ class hyperLOOP {
    
     let delta :number = clock.getDelta();
 
+    stage.remove(tube);
+    stage.remove(wirelines);
+    let path: CustomCurve = new CustomCurve(20);
+    tube = Tube(path);
+    let tubegeometry = tube.geometry;
+    let wireframe :THREE.WireframeGeometry = new THREE.WireframeGeometry(tubegeometry);
+    wirelines  = new THREE.LineSegments(wireframe);
+    stage.add(tube);
+    stage.add(wirelines);
+
     controls.movementSpeed += delta*0.2;
     controls.lookSpeed += delta*0.02;
     
@@ -156,7 +166,7 @@ class hyperLOOP {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
 
-    if(skip === 0 && !dead){
+    /*if(skip === 0 && !dead){
       const point = camera.position;
       const mesh = tube;
       const raycaster = new THREE.Raycaster()
@@ -167,7 +177,7 @@ class hyperLOOP {
         console.log('camera outside of tube');
         deadCallback();
       }
-    }
+    }*/
   
   };
 

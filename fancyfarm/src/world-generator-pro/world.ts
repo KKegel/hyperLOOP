@@ -18,7 +18,7 @@ class WorldUpdateHandler implements Updateable{
 }
 
 export class World implements TubeSpec {
-  private queue: Vector3[] = [];
+  public queue: Vector3[] = [];
 
   private lastPathSegment: Vector3;
   private maxOffset: number;
@@ -83,7 +83,7 @@ export class World implements TubeSpec {
   }
 
   checkUpdateStatus(pos: Vector3): boolean {
-    return this.queue[0].clone().sub(pos).lengthSq() > this.len_square + 100;
+    return this.queue[0].clone().sub(pos).lengthSq() > this.len_square + 1000;
   }
 
   getVec(t_: number) {
