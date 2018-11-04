@@ -15,8 +15,10 @@ class WorldUpdateHandler implements Updateable{
   constructor(private readonly world: World, private readonly player: {position: Vector3}) {}
 
   update(dt) {
-    if(this.world.checkUpdateStatus(this.player.position))
+    // console.log(this.player.position)
+    if(this.world.checkUpdateStatus(this.player.position)) {
       this.world.update();
+    }
   }
 }
 
@@ -92,7 +94,9 @@ export class World implements TubeSpec {
   }
 
   checkUpdateStatus(pos: Vector3): boolean {
-    return this.queue[0].position.clone().sub(pos).lengthSq() > this.len_square + 1000;
+    const dist = this.queue[0].position.clone().sub(pos).lengthSq();
+    console.log(dist)
+    return dist > this.len_square + 1000;
   }
 
   getVec(t_: number) {
