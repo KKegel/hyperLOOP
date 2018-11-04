@@ -13,7 +13,7 @@ OBJLoaderInjector(THREE);
 
 declare function require(string): string;
 const audioFile_Rise = require('./sounds/8-bit Detective.wav');
-//const audioFile_Pong = require('./sounds/pong.mp3');
+const audioFile_Pong = require('./sounds/blob.mp3');
 const objFile_paperplane = require('../geometry/paperplane.obj');
 const mtlFile_paperplane = require('../geometry/paperplane.mtl');
 
@@ -136,6 +136,7 @@ class hyperLOOP {
       camera.add( listener );
       var sound = new THREE.Audio( listener );
       var audioLoader = new THREE.AudioLoader();
+      
 
       audioLoader.load( audioFile_Rise, function( buffer ) {
         sound.setBuffer( buffer );
@@ -143,6 +144,18 @@ class hyperLOOP {
         sound.setVolume( 0.5 );
         sound.play();
       }, null, null);
+
+
+      let sound2 = new THREE.Audio(listener);
+      audioLoader.load( audioFile_Pong, function( buffer ) {
+        sound2.setBuffer( buffer );
+        sound2.setLoop( false );
+        sound2.setVolume( 10 );
+        sound2.play()
+        lightHandler.addSound(sound2);
+      }, null, null);
+
+      
 
       /*var sound2 = new THREE.PositionalAudio( listener );
       audioLoader.load( audioFile_Pong, function ( buffer ) {
@@ -161,7 +174,7 @@ class hyperLOOP {
  
   let oldhead = world.queue[0].key;
 
-  var mouse = new THREE.Vector2(), INTERSECTED;
+  var mouse = new THREE.Vector2();//, INTERSECTED;
 
   const onDocumentMouseMove = ( event ) => {
     event.preventDefault();
@@ -233,19 +246,24 @@ class hyperLOOP {
       });
   
       var bulbsIntersects = lightRaycaster.intersectObjects( arr );
+
       if ( bulbsIntersects.length > 0 ) {
-        if ( INTERSECTED != intersects[ 0 ].object ) {
-          if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+        
+        /* if ( INTERSECTED != intersects[ 0 ].object ) {
+          if ( INTERSECTED ) 
+          INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
           INTERSECTED = intersects[ 0 ].object;
-          INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
-          INTERSECTED.material.emissive.setHex( 0xffffff );
+          //INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+          INTERSECTED
+          //INTERSECTED.material.emissive.setHex( 0xffffff );
         }
       } else {
         if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
         INTERSECTED = null;
-      }
+      }*/
 
     }
+  }
 
     
 
