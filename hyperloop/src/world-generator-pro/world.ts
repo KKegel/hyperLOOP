@@ -39,7 +39,8 @@ export class World implements TubeSpec {
     private readonly len: number,
     public k: number,
     private readonly queueSize: number,
-    public readonly scale: number
+    public readonly scale: number,
+    private readonly straightElementsNumber: number
   ) {
     this.maxOffset = k * len;
     this.minDistance = 0.5 * (len*scale*queueSize) * (len*scale*queueSize) ;
@@ -48,8 +49,17 @@ export class World implements TubeSpec {
   }
 
   private initWorld() {
-    this.queue = [new PathElement(new Vector3(0,0,0), this.nextKey)]
+    this.queue = [new PathElement(new Vector3(0,0,0), this.nextKey)];
     this.nextKey++;
+    for(let j=0; j < this.straightElementsNumber; j++) {
+      this.queue.push(
+        new PathElement(
+          this.queue[this.queue.length-1].position.clone().add(this.lastPathSegment),
+          this.nextKey
+      ));
+      this.nextKey++;
+    }
+    
     for(let i=0; i < this.queueSize; i++) {
       this.pushNextElement();
     }

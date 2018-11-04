@@ -249,7 +249,7 @@ class hyperLOOP {
       map.forEach((bulb, key) => {
         arr[i] = bulb.getMesh();
         i++;
-      });
+    });
   
       var bulbsIntersects = lightRaycaster.intersectObjects( arr );
 
