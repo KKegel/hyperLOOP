@@ -5,7 +5,7 @@ import Wizard from './Wizard';
 import * as FirstPersonControls from './FirstPersonControls';
 import { LightHandler } from 'src/scene/lights';
 import * as OBJLoaderInjector from './OBJLoader';
-import { OBJLoader, Euler, PerspectiveCamera } from 'three';
+import { OBJLoader, Euler, PerspectiveCamera, Vector3 } from 'three';
 import { world } from 'src/world-generator-pro';
 
 FirstPersonControls(THREE);
@@ -72,6 +72,7 @@ class hyperLOOP {
   let camera :THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
     75, window.innerWidth / window.innerHeight, 0.1, 1000
     );
+  camera.lookAt(new Vector3(-1,0,0));
   this.THREE = THREE;
   const controls = new this.THREE.FirstPersonControls(camera);
   
@@ -131,7 +132,7 @@ class hyperLOOP {
 
   scene.add(stage);
 
-  let lightHandler :LightHandler = new LightHandler(wizard, scene, 15);
+  let lightHandler :LightHandler = new LightHandler(wizard, scene, 14);
   wizard.addUpdateable(lightHandler);
 
   (() => {

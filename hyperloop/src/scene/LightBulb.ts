@@ -20,7 +20,7 @@ class LightBulb implements Updateable{
     this.animator = animator;
     this.id = id;
 
-    this.light = new THREE.PointLight(color, 7, 12);
+    this.light = new THREE.PointLight(color, 6, 12);
     this.sphere = new THREE.SphereBufferGeometry( 0.7, 64, 9 );
     this.mesh = new THREE.Mesh( this.sphere, new THREE.MeshBasicMaterial( { color: color } ) );
     this.light.add( this.mesh  );
