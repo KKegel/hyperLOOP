@@ -21,8 +21,14 @@ class App extends React.Component{
    public render() {
     
     
-      return (  
-        <div className="App" />
+      return (
+        <>
+          <div className="App" />
+          <div style={{
+            position: 'absolute',
+            bottom: 0
+          }}>Music by <a target="_blank" href="http://freemusicarchive.org/music/Edward_Shallow/">Edward Shallow</a></div>
+        </>
       );
     
   }

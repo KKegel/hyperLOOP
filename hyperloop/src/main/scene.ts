@@ -14,6 +14,7 @@ OBJLoaderInjector(THREE);
 
 // Import static assets
 declare function require(string): string;
+const audioFile_submerged = require('./sounds/Edward_Shallow_-_03_-_Submerged.mp3');
 const audioFile_Rise = require('./sounds/8-bit Detective.wav');
 const audioFile_Pong = require('./sounds/blob.mp3');
 const objFile_paperplane = require('../geometry/paperplane.obj');
@@ -101,7 +102,7 @@ class HyperLOOP extends Game {
         const sound = new THREE.Audio( listener );
         const audioLoader = new THREE.AudioLoader();
         
-        audioLoader.load( audioFile_Rise, ( buffer ) => {
+        audioLoader.load( audioFile_submerged, ( buffer ) => {
           sound.setBuffer( buffer );
           sound.setLoop( true );
           sound.setVolume( 0.5 );
