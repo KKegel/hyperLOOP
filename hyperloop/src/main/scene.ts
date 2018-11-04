@@ -27,8 +27,21 @@ class hyperLOOP {
 
   private THREE;
   
+  addTimer() {
+    const container = document.createElement( 'div' );
+    document.body.appendChild( container );
+    var info = document.createElement( 'div' );
+    info.style.position = 'absolute';
+    info.style.top = '10px';
+    info.style.width = '100%';
+    info.style.textAlign = 'center';
+    info.innerHTML = 'TIME: ';
+    container.appendChild( info );
+    
+  }
   constructor(deadCallback :DeadCallback){
   
+  this.addTimer();
   let dead :boolean = false;
   let scene :THREE.Scene = new THREE.Scene();
   let camera :THREE.PerspectiveCamera = new THREE.PerspectiveCamera(
@@ -137,6 +150,8 @@ class hyperLOOP {
   let oldhead = world.queue[0].key;
 
   var mouse = new THREE.Vector2(), INTERSECTED;
+  const lightRaycaster = new THREE.Raycaster();
+
   const animate = () => {
 
     skip = (skip+1)%10;
@@ -196,8 +211,7 @@ class hyperLOOP {
       }
 
       // check mouse over light bulb
-      const lightRaycaster = new THREE.Raycaster();
-      raycaster.setFromCamera( mouse, camera );
+      lightRaycaster.setFromCamera( mouse, camera );
 
       let bulbs;
       lightHandler.getBulbs().forEach((bulb, key) => {
@@ -211,6 +225,8 @@ class hyperLOOP {
           INTERSECTED = intersects[ 0 ].object;
           INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
           INTERSECTED.material.emissive.setHex( 0xff0000 );
+
+
         }
       } else {
         if ( INTERSECTED ) INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
