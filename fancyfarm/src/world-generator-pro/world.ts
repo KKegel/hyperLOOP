@@ -112,5 +112,13 @@ export class World implements TubeSpec {
     return lowerVec.add(higherVec);
   }
 
+  getBlockById(id :number){
+    for(let i = 0; i < this.queue.length; i++){
+      if(this.queue[i].key === id){
+        return this.queue[i];
+      }
+    }
+  }
+
 
 }
