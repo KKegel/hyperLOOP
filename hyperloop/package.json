@@ -1,6 +1,7 @@
 {
   "name": "hyperloop",
   "version": "0.1.0",
+  "homepage": "https://kkegel.github.io/gamejam/hyperloop",
   "private": true,
   "dependencies": {
     "@types/randomcolor": "^0.5.0",
@@ -23,6 +24,7 @@
   "main": "public/electron.js",
   "scripts": {
     "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
     "start2": "concurrently \"cross-env BROWSER=none react-scripts-ts start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "devDependencies": {
