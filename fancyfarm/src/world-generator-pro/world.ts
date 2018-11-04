@@ -93,10 +93,14 @@ export class World implements TubeSpec {
     console.log('new')
   }
 
-  checkUpdateStatus(pos: Vector3): boolean {
-    const dist = this.queue[0].position.clone().sub(pos).lengthSq();
+  checkUpdateStatus({x,y,z}: Vector3): boolean {
+    const s = 1/20;
+
+    const fpos = this.queue[this.queue.length-1].position.clone();
+    console.log(fpos);
+    const dist = fpos.sub(new Vector3(s*x,s*y,-s*z)).lengthSq();
     console.log(dist)
-    return dist > this.len_square + 1000;
+    return dist < 100;
   }
 
   getVec(t_: number) {
