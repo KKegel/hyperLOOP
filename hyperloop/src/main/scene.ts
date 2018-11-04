@@ -54,7 +54,9 @@ class hyperLOOP {
     this.timeText.style.textAlign = 'center';
     this.timeText.style.fontSize = "60px";
     this.timeText.style.color = "white";
-    this.timeText.style.fontFamily = "Monospaced";
+    this.timeText.style.textShadow = "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black";
+    this.timeText.style.fontFamily = "Space Mono, monospace";
+    this.timeText.style.zIndex = 10;
     this.timeText.innerHTML = '0';    
     container.appendChild( this.timeText );
     
