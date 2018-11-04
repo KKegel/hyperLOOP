@@ -3,7 +3,7 @@ import * as THREE from 'three';
 
 const particles  = ( scene, position ) => {
 
-    var particles = 500000;
+    var particles = 5;
 
     var geometry = new THREE.BufferGeometry();
 
@@ -47,7 +47,7 @@ const particles  = ( scene, position ) => {
 
     //
 
-    var material = new THREE.PointsMaterial( { size: 10, vertexColors: THREE.VertexColors } );
+    var material = new THREE.PointsMaterial( { size: 1, vertexColors: THREE.VertexColors } );
 
     let points = new THREE.Points( geometry, material );
     scene.add( points );
