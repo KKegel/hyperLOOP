@@ -47,12 +47,19 @@ export class LightHandler implements Updateable{
   private bulbs :Map<number, LightBulb>;
   private foresight :number;
 
+  private sound: THREE.Audio;
+
   constructor(wizard :Wizard, scene :THREE.Scene, foresight :number){
+    this.sound = null;
     this.wizard = wizard;
     this.scene = scene;
     this.foresight = foresight;
 
     this.bulbs = new Map();
+  }
+
+  public addSound(sound :THREE.Audio){
+    this.sound = sound;
   }
 
   public update(dt: number) :void {
@@ -81,6 +88,9 @@ export class LightHandler implements Updateable{
       if(!this.bulbs.has(key)){
         //throw new Error();
         let bulb :LightBulb = makeLight(key);
+        if(this.sound !== null){
+          this.sound.play();
+        }
         this.bulbs.set(key, bulb);
         this.wizard.addUpdateable(bulb);
         this.scene.add(bulb.getLight());
