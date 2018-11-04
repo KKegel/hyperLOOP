@@ -17,7 +17,7 @@ const audioFile_Rise = require('./sounds/8-bit Detective.wav');
 const objFile_paperplane = require('../geometry/paperplane.obj');
 const mtlFile_paperplane = require('../geometry/paperplane.mtl');
 
-const PLAY_AUDIO = false;//true;
+const PLAY_AUDIO = true;//true;
 const DEBUG_CONTROLS = false;//true;
 
 type DeadCallback = () => void;
@@ -101,7 +101,7 @@ class hyperLOOP {
 
   scene.add(stage);
 
-  let lightHandler :LightHandler = new LightHandler(wizard, scene, 14);
+  let lightHandler :LightHandler = new LightHandler(wizard, scene, 15);
   wizard.addUpdateable(lightHandler);
 
   (() => {
@@ -138,7 +138,7 @@ class hyperLOOP {
 
   const animate = () => {
 
-    skip = (skip+1)%20;
+    skip = (skip+1)%10;
    
     let delta :number = clock.getDelta();
 
